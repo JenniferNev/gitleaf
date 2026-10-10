@@ -20,7 +20,7 @@ pnpm check:identity
 pnpm check:themes      # needs python3
 ```
 
-Node 24 or newer and pnpm 10 (`corepack enable` or Volta both work).
+Node 24 or newer and pnpm 10 (`corepack enable` or Volta both work). For the secret-scanning hook, install [pre-commit](https://pre-commit.com) and run `pre-commit install` once per clone. `pnpm check:secrets` needs `gitleaks` on your PATH (or run `scripts/install-gitleaks.sh` and use `.tools/bin/gitleaks`).
 
 ## Workflow
 
@@ -45,7 +45,7 @@ This adds `Signed-off-by: Your Name <you@example.com>`. CI rejects commits witho
 ## Definition of Done
 
 - Every acceptance criterion on the item is checked and covered by a test.
-- `pnpm build`, `pnpm test`, `pnpm lint`, `pnpm gitleaf validate`, `pnpm check:identity` and `pnpm check:themes` pass.
+- `pnpm build`, `pnpm test`, `pnpm lint`, `pnpm gitleaf validate`, `pnpm check:identity`, `pnpm check:themes` and `pnpm check:secrets` pass.
 - Docs and ADRs are updated where behavior changed.
 - The PR description lists the acceptance criteria you verified and the commands you ran.
 

@@ -48,10 +48,11 @@ pnpm lint                    # ESLint (typed) + Prettier check. Includes the cor
 pnpm gitleaf validate        # frontmatter, links, owners, secret refs (stub until ST-PV13MRCY)
 pnpm check:identity          # scripts/check-identity.sh
 pnpm check:themes            # regenerate Gitleaf Ink/Paper, fail on contrast failures or drift (needs python3)
+pnpm check:secrets           # gitleaks full-history scan + planted-key proof (needs gitleaks; see SECURITY.md)
 pnpm --filter gitleaf-themes generate   # regenerate the themes + contrast report only
 ```
 
-CI runs all of these on every PR (`.github/workflows/ci.yml`, `azure-pipelines.yml`), plus a DCO sign-off check.
+CI runs all of these on every PR (`.github/workflows/ci.yml`, `azure-pipelines.yml`), plus a DCO sign-off check. Locally, `pre-commit install` enables the gitleaks hook.
 
 ## Architecture rules (hard)
 

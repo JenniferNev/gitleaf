@@ -1,0 +1,16 @@
+# Gitleaks configuration for this repository.
+# Extends the default ruleset; every allowlist entry below is deliberate and explicit.
+title = "gitleaf"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Only paths that can never hold a real credential"
+paths = [
+  # Lock files hold package integrity hashes, not credentials.
+  '''pnpm-lock\.yaml$''',
+]
+# Test fixtures that intentionally contain fake credentials go in
+# packages/*/test/fixtures/secrets/ and must be added here one path at a time,
+# with a comment saying which test needs them.

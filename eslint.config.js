@@ -10,7 +10,13 @@ const nodeBuiltins = [...new Set(builtinModules.flatMap((m) => [m, `node:${m}`])
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '**/node_modules/**', 'packages/themes/**', '**/*.d.ts'],
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      'packages/themes/**',
+      '**/*.d.ts',
+      '**/src/generated/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked,

@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-KT3NG4K8
 type: story
 title: Doc frontmatter and gitleaf.yaml schemas v1
-status: backlog
+status: in-review
 priority: high
 epic: EP-0RQVJECD
 points: 5

@@ -1,0 +1,15 @@
+schema: gitleaf/config@1
+roots:
+  - path: docs
+    name: Gitleaf docs
+  - path: agile/items
+    name: Backlog
+    include: ['*.md']
+rules:
+  owners: optional
+  frontmatter: optional
+  stale_after_days: 180
+  links: error
+forge:
+  kind: github
+  url: https://github.com/JenniferNev/gitleaf

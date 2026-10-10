@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gitleaf:schema:agile-config@1",
+  "title": "Agile module configuration (gitleaf/agile-config@1)",
+  "description": "agile/config.yaml: project key, id policy, workflow, estimation scale and sprint settings.",
+  "type": "object",
+  "properties": {
+    "schema": { "const": "gitleaf/agile-config@1" },
+    "project": {
+      "type": "object",
+      "properties": {
+        "key": { "type": "string", "pattern": "^[A-Z]{2,6}$" },
+        "name": { "type": "string", "minLength": 1 }
+      },
+      "required": ["key", "name"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "id": {
+      "type": "object",
+      "properties": {
+        "alphabet": { "const": "crockford32" },
+        "length": { "type": "integer", "minimum": 6, "maximum": 16 }
+      },
+      "required": ["alphabet", "length"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "workflow": {
+      "type": "object",
+      "properties": {
+        "statuses": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/status" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "transitions": {
+          "description": "From status to the list of statuses it may move to.",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z][a-z0-9-]*$": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/status" },
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "wip_limits": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z][a-z0-9-]*$": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["statuses"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "estimation": {
+      "type": "object",
+      "properties": {
+        "scale": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "integer", "minimum": 0 },
+              { "type": "string", "minLength": 1 }
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": ["scale"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "sprints": {
+      "type": "object",
+      "properties": {
+        "length_days": { "type": "integer", "minimum": 1, "maximum": 60 },
+        "naming": { "type": "string", "minLength": 1 }
+      },
+      "required": ["length_days"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    }
+  },
+  "required": ["schema", "project", "workflow"],
+  "patternProperties": { "^x-": {} },
+  "additionalProperties": false,
+  "$defs": {
+    "status": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+  }
+}

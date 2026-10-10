@@ -49,6 +49,7 @@ pnpm gitleaf validate        # frontmatter, links, owners, secret refs (stub unt
 pnpm check:identity          # scripts/check-identity.sh
 pnpm check:themes            # regenerate Gitleaf Ink/Paper, fail on contrast failures or drift (needs python3)
 pnpm check:secrets           # gitleaks full-history scan + planted-key proof (needs gitleaks; see SECURITY.md)
+pnpm check:generated         # regenerate TS types from packages/schema/schemas and fail on drift
 pnpm --filter gitleaf-themes generate   # regenerate the themes + contrast report only
 ```
 

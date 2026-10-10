@@ -1,0 +1,5 @@
+schema: gitleaf/config@1
+roots:
+  - path: /etc/docs
+  - path: ../outside
+  - path: docs\windows

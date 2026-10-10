@@ -33,6 +33,8 @@ stages:
             displayName: Lint
           - script: pnpm gitleaf validate
             displayName: gitleaf validate
+          - script: pnpm check:generated
+            displayName: Generated schema types are up to date
 
       - job: guards
         displayName: Identity guard and theme contrast

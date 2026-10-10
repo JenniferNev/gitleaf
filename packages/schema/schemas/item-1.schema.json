@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gitleaf:schema:item@1",
+  "title": "Agile work item frontmatter (gitleaf/item@1)",
+  "description": "One work item per file under agile/items/. Status lives here, never in the path. Key order in this schema is the canonical serialization order.",
+  "type": "object",
+  "properties": {
+    "schema": { "const": "gitleaf/item@1" },
+    "id": { "$ref": "#/$defs/entityId" },
+    "type": { "type": "string", "enum": ["epic", "story", "spike", "task", "bug"] },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "status": {
+      "description": "Must be one of the statuses declared in agile/config.yaml. The default workflow is listed here.",
+      "type": "string",
+      "enum": ["backlog", "ready", "in-progress", "in-review", "done", "wont-do"]
+    },
+    "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+    "epic": { "$ref": "#/$defs/entityId" },
+    "sprint": {
+      "description": "Sprint name, for example 2026-S21. Membership lives on the item.",
+      "type": "string",
+      "pattern": "^[0-9]{4}-S[0-9]{2}$"
+    },
+    "points": {
+      "description": "Estimate on the scale declared in agile/config.yaml.",
+      "anyOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "string", "enum": ["?", "coffee"] }
+      ]
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entityId" },
+      "uniqueItems": true
+    },
+    "labels": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+      "uniqueItems": true
+    },
+    "assignees": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "docs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "prs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "issues": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      },
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "created": { "type": "string", "format": "date" },
+    "updated": { "type": "string", "format": "date" }
+  },
+  "required": ["schema", "id", "type", "title", "status", "created"],
+  "patternProperties": { "^x-": {} },
+  "additionalProperties": false,
+  "$defs": {
+    "entityId": {
+      "type": "string",
+      "pattern": "^[A-Z]{2,4}-[0-9A-HJKMNP-TV-Z]{8}$"
+    }
+  }
+}

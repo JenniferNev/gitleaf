@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gitleaf:schema:doc@1",
+  "title": "Gitleaf doc frontmatter (gitleaf/doc@1)",
+  "description": "Optional YAML frontmatter of a Markdown doc. Key order in this schema is the canonical serialization order. Unknown keys are allowed only under the x- prefix.",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "description": "Schema marker. Optional for docs; when present it must be gitleaf/doc@1.",
+      "const": "gitleaf/doc@1"
+    },
+    "id": {
+      "description": "Stable identity that survives file moves. <TYPE>-<8 Crockford base32 chars>.",
+      "$ref": "#/$defs/entityId"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "owners": {
+      "description": "People or teams responsible for the doc. Handles, emails or team names.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in-review", "published", "archived"]
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+      "uniqueItems": true
+    },
+    "review_by": {
+      "description": "Date (YYYY-MM-DD) after which the doc counts as stale unless reviewed.",
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "patternProperties": {
+    "^x-": {
+      "description": "Extension keys. Gitleaf preserves them and never interprets them."
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "entityId": {
+      "type": "string",
+      "pattern": "^[A-Z]{2,4}-[0-9A-HJKMNP-TV-Z]{8}$"
+    }
+  }
+}

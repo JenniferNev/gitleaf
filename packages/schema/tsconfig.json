@@ -5,7 +5,8 @@
     "declaration": false,
     "declarationMap": false,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "schemas/*.json", "scripts/**/*.ts", "test/**/*.ts"]
 }

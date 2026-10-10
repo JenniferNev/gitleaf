@@ -19,7 +19,8 @@
     "check:identity": "bash scripts/check-identity.sh",
     "check:themes": "pnpm --filter gitleaf-themes run generate && git diff --exit-code -- packages/themes/themes",
     "clean": "pnpm -r run clean",
-    "check:secrets": "gitleaks git --config .gitleaks.toml --redact --no-banner --exit-code 1 . && bash scripts/test-secret-guard.sh"
+    "check:secrets": "gitleaks git --config .gitleaks.toml --redact --no-banner --exit-code 1 . && bash scripts/test-secret-guard.sh",
+    "check:generated": "pnpm --filter @gitleaf/schema run check:generated"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

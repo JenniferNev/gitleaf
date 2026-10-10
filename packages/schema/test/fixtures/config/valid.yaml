@@ -1,0 +1,18 @@
+schema: gitleaf/config@1
+roots:
+  - path: docs
+  - path: handbook
+    repo: ../platform-docs
+    name: Platform handbook
+    exclude: ['**/legacy/**']
+rules:
+  owners: required
+  stale_after_days: 90
+forge:
+  kind: azure-devops
+  url: https://dev.azure.com/acme/platform
+  token: secret://infisical/platform/ado-token
+secrets:
+  backend: infisical
+  url: https://app.infisical.com
+  project: platform

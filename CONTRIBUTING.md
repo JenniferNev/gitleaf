@@ -45,7 +45,7 @@ This adds `Signed-off-by: Your Name <you@example.com>`. CI rejects commits witho
 ## Definition of Done
 
 - Every acceptance criterion on the item is checked and covered by a test.
-- `pnpm build`, `pnpm test`, `pnpm lint`, `pnpm gitleaf validate`, `pnpm check:identity`, `pnpm check:themes` and `pnpm check:secrets` pass.
+- `pnpm build`, `pnpm test`, `pnpm lint`, `pnpm gitleaf validate`, `pnpm check:identity`, `pnpm check:themes`, `pnpm check:secrets` and `pnpm check:generated` pass.
 - Docs and ADRs are updated where behavior changed.
 - The PR description lists the acceptance criteria you verified and the commands you ran.
 

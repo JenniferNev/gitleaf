@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gitleaf:schema:config@1",
+  "title": "gitleaf.yaml (gitleaf/config@1)",
+  "description": "Workspace configuration at a repository root. Declares doc roots across repos, rules, forge settings and secret backends. Holds secret:// references only, never values.",
+  "type": "object",
+  "properties": {
+    "schema": { "const": "gitleaf/config@1" },
+    "roots": {
+      "description": "Where docs live. Each root is a folder, optionally in another repository.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/root" }
+    },
+    "rules": { "$ref": "#/$defs/rules" },
+    "forge": { "$ref": "#/$defs/forge" },
+    "secrets": { "$ref": "#/$defs/secrets" },
+    "appearance": {
+      "description": "Hints only. The user's gitleaf.appearance setting and installed packs decide.",
+      "type": "object",
+      "properties": {
+        "suggest": { "type": "string", "minLength": 1 }
+      },
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    }
+  },
+  "required": ["schema", "roots"],
+  "patternProperties": { "^x-": {} },
+  "additionalProperties": false,
+  "$defs": {
+    "relativePath": {
+      "description": "A path relative to the repository root, with forward slashes, no leading slash and no '..' segments.",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[^\\\\]+$"
+    },
+    "secretRef": {
+      "description": "A reference to a secret in an external store. Never a value.",
+      "type": "string",
+      "pattern": "^secret://[A-Za-z0-9._~!$&'()*+,;=:@/%-]+$"
+    },
+    "root": {
+      "type": "object",
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "repo": {
+          "description": "Another repository holding this root: a path relative to this repo's parent folder, or a workspace folder name. Omit for this repository.",
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "description": "Display name for this root in the docs explorer.",
+          "type": "string",
+          "minLength": 1
+        },
+        "include": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "default": ["**/*.md"]
+        },
+        "exclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "required": ["path"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "rules": {
+      "type": "object",
+      "properties": {
+        "owners": {
+          "description": "Whether every doc must declare owners in its frontmatter.",
+          "type": "string",
+          "enum": ["required", "optional"],
+          "default": "optional"
+        },
+        "stale_after_days": {
+          "description": "A doc with no change for this many days is reported as stale. 0 disables the check.",
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "frontmatter": {
+          "description": "Whether every doc must have frontmatter.",
+          "type": "string",
+          "enum": ["required", "optional"],
+          "default": "optional"
+        },
+        "links": {
+          "description": "Whether broken relative links and wikilinks are errors, warnings or ignored.",
+          "type": "string",
+          "enum": ["error", "warn", "off"],
+          "default": "error"
+        }
+      },
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "forge": {
+      "description": "Where pull requests live. Credentials are references only.",
+      "type": "object",
+      "properties": {
+        "kind": { "type": "string", "enum": ["github", "azure-devops", "gitlab"] },
+        "url": {
+          "description": "Repository URL on GitHub or GitLab, or the project URL on Azure DevOps.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "token": { "$ref": "#/$defs/secretRef" }
+      },
+      "required": ["kind", "url"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "secrets": {
+      "description": "Which external store the secret:// references resolve against. Metadata only.",
+      "type": "object",
+      "properties": {
+        "backend": { "type": "string", "enum": ["infisical", "openbao", "sops"] },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "project": { "type": "string", "minLength": 1 },
+        "path": {
+          "description": "For sops: the relative path of the private secrets repo or file.",
+          "type": "string",
+          "minLength": 1
+        },
+        "token": { "$ref": "#/$defs/secretRef" }
+      },
+      "required": ["backend"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    }
+  }
+}

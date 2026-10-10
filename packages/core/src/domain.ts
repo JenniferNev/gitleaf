@@ -17,14 +17,16 @@ export interface Repo {
   readonly rootPath: string;
 }
 
+/** Mirrors `gitleaf/doc@1` in packages/schema. Keys use the on-disk spelling. */
 export interface DocFrontmatter {
+  readonly schema?: 'gitleaf/doc@1';
   readonly id?: EntityId;
   readonly title?: string;
   readonly owners?: readonly string[];
   readonly status?: DocStatus;
   readonly tags?: readonly string[];
-  /** ISO date (YYYY-MM-DD) after which the doc counts as stale. */
-  readonly reviewBy?: string;
+  /** ISO date (YYYY-MM-DD) after which the doc counts as stale. Snake case: it mirrors the file format. */
+  readonly review_by?: string;
 }
 
 export interface Doc {

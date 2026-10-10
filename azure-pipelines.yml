@@ -1,0 +1,53 @@
+# Azure Pipelines equivalent of .github/workflows/ci.yml
+trigger:
+  branches:
+    include: [main]
+pr:
+  branches:
+    include: ['*']
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  PNPM_HOME: $(Pipeline.Workspace)/.pnpm
+
+stages:
+  - stage: CI
+    jobs:
+      - job: build
+        displayName: Build, test, lint
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '24.x'
+          - script: corepack enable && corepack prepare pnpm@10.18.3 --activate
+            displayName: Enable pnpm
+          - script: pnpm install --frozen-lockfile
+            displayName: Install
+          - script: pnpm build
+            displayName: Build
+          - script: pnpm test
+            displayName: Test
+          - script: pnpm lint
+            displayName: Lint
+          - script: pnpm gitleaf validate
+            displayName: gitleaf validate
+
+      - job: guards
+        displayName: Identity guard and theme contrast
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '24.x'
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '3.12'
+          - script: corepack enable && corepack prepare pnpm@10.18.3 --activate
+            displayName: Enable pnpm
+          - script: pnpm install --frozen-lockfile
+            displayName: Install
+          - script: bash scripts/check-identity.sh
+            displayName: Identity guard
+          - script: pnpm check:themes
+            displayName: Theme contrast and drift

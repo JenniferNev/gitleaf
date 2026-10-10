@@ -1,0 +1,43 @@
+{
+  "name": "gitleaf",
+  "displayName": "Gitleaf",
+  "description": "Documentation as Markdown in git: reviewable, attributable line by line, and agent-ready. Gitleaf for VS Code.",
+  "version": "0.0.0",
+  "publisher": "gitleaf",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "documentation",
+    "markdown",
+    "git",
+    "provenance",
+    "agents"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {},
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "In Restricted Mode Gitleaf is read-only."
+    },
+    "virtualWorkspaces": false
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@gitleaf/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0"
+  }
+}

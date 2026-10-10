@@ -1,20 +1,57 @@
 {
   "$description": "Gitleaf public palette (W3C Design Tokens format). Source of truth for the color themes and the extension's webview tokens. MIT licensed.",
   "color": {
-    "sky":    { "$type": "color", "$value": "#4AB3F8", "$description": "Functions, links, info, modified" },
-    "butter": { "$type": "color", "$value": "#F7F099", "$description": "Strings, headings (dark), primary button, warnings. Fill-only on light grounds" },
-    "pink":   { "$type": "color", "$value": "#FC4CBC", "$description": "Keywords, errors, deleted" },
+    "sky": {
+      "$type": "color",
+      "$value": "#4AB3F8",
+      "$description": "Functions, links, info, modified"
+    },
+    "butter": {
+      "$type": "color",
+      "$value": "#F7F099",
+      "$description": "Strings, headings (dark), primary button, warnings. Fill-only on light grounds"
+    },
+    "pink": { "$type": "color", "$value": "#FC4CBC", "$description": "Keywords, errors, deleted" },
     "violet": { "$type": "color", "$value": "#CF3BF7", "$description": "Types, conflicts" },
-    "purple": { "$type": "color", "$value": "#962DCF", "$description": "Regex/escapes; needs a lighter variant on dark grounds" },
-    "plum":   { "$type": "color", "$value": "#53235E", "$description": "Status bar, selection, headings (light)" },
-    "leaf":   { "$type": "color", "$value": "#5EE6A8", "$description": "Functional green: added, success, numbers. Added for git and terminals" },
-    "ink":    { "$type": "color", "$value": "#040F16", "$description": "Dark ground" },
-    "paper":  { "$type": "color", "$value": "#F8F8F8", "$description": "Light ground" }
+    "purple": {
+      "$type": "color",
+      "$value": "#962DCF",
+      "$description": "Regex/escapes; needs a lighter variant on dark grounds"
+    },
+    "plum": {
+      "$type": "color",
+      "$value": "#53235E",
+      "$description": "Status bar, selection, headings (light)"
+    },
+    "leaf": {
+      "$type": "color",
+      "$value": "#5EE6A8",
+      "$description": "Functional green: added, success, numbers. Added for git and terminals"
+    },
+    "ink": { "$type": "color", "$value": "#040F16", "$description": "Dark ground" },
+    "paper": { "$type": "color", "$value": "#F8F8F8", "$description": "Light ground" }
   },
   "font": {
-    "display": { "$type": "fontFamily", "$value": ["Chakra Petch", "system-ui", "sans-serif"], "$description": "OFL. Display numerals and titles only" },
-    "text":    { "$type": "fontFamily", "$value": ["Poppins", "system-ui", "sans-serif"], "$description": "OFL. Docs site body" }
+    "display": {
+      "$type": "fontFamily",
+      "$value": ["Chakra Petch", "system-ui", "sans-serif"],
+      "$description": "OFL. Display numerals and titles only"
+    },
+    "text": {
+      "$type": "fontFamily",
+      "$value": ["Poppins", "system-ui", "sans-serif"],
+      "$description": "OFL. Docs site body"
+    }
   },
-  "space":  { "$type": "dimension", "unit": { "$value": "4px" }, "scale": { "$value": [2, 4, 6, 8, 12, 16, 20, 24, 32] } },
-  "radius": { "$type": "dimension", "sm": { "$value": "2px" }, "md": { "$value": "4px" }, "lg": { "$value": "6px" } }
+  "space": {
+    "$type": "dimension",
+    "unit": { "$value": "4px" },
+    "scale": { "$value": [2, 4, 6, 8, 12, 16, 20, 24, 32] }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm": { "$value": "2px" },
+    "md": { "$value": "4px" },
+    "lg": { "$value": "6px" }
+  }
 }

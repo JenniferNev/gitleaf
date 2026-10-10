@@ -5,13 +5,44 @@
   "version": "0.1.0",
   "publisher": "gitleaf",
   "license": "MIT",
-  "engines": { "vscode": "^1.90.0" },
-  "categories": ["Themes"],
-  "keywords": ["theme", "dark theme", "light theme", "accessible", "documentation", "markdown"],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "dark theme",
+    "light theme",
+    "accessible",
+    "documentation",
+    "markdown"
+  ],
   "contributes": {
     "themes": [
-      { "id": "Gitleaf Ink", "label": "Gitleaf Ink", "uiTheme": "vs-dark", "path": "./themes/gitleaf-ink-color-theme.json" },
-      { "id": "Gitleaf Paper", "label": "Gitleaf Paper", "uiTheme": "vs", "path": "./themes/gitleaf-paper-color-theme.json" }
+      {
+        "id": "Gitleaf Ink",
+        "label": "Gitleaf Ink",
+        "uiTheme": "vs-dark",
+        "path": "./themes/gitleaf-ink-color-theme.json"
+      },
+      {
+        "id": "Gitleaf Paper",
+        "label": "Gitleaf Paper",
+        "uiTheme": "vs",
+        "path": "./themes/gitleaf-paper-color-theme.json"
+      }
     ]
+  },
+  "scripts": {
+    "generate": "python3 scripts/gen_theme.py scripts themes",
+    "build": "echo \"gitleaf-themes: nothing to build (JSON themes are committed; run generate to refresh)\"",
+    "package": "npx --yes @vscode/vsce@3 package --no-dependencies -o gitleaf-themes.vsix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JennNev/gitleaf",
+    "directory": "packages/themes"
   }
 }

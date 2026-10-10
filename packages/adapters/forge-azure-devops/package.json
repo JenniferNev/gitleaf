@@ -1,0 +1,23 @@
+{
+  "name": "@gitleaf/adapter-forge-azure-devops",
+  "version": "0.0.0",
+  "description": "Adapter: forge-azure-devops. Implements ports from @gitleaf/core.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@gitleaf/core": "workspace:*"
+  }
+}

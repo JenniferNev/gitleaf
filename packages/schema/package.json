@@ -1,0 +1,23 @@
+{
+  "name": "@gitleaf/schema",
+  "version": "0.0.0",
+  "description": "JSON Schemas (doc frontmatter, gitleaf.yaml, agile module) and migrations.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@gitleaf/core": "workspace:*"
+  }
+}

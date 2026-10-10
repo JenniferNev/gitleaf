@@ -1,0 +1,20 @@
+{
+  "name": "@gitleaf/core",
+  "version": "0.0.0",
+  "description": "Gitleaf domain model, ports and use cases. Pure TypeScript: no I/O, no vscode.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  }
+}

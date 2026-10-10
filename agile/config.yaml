@@ -1,0 +1,13 @@
+schema: gitleaf/agile-config@1
+project: { key: GL, name: Gitleaf }
+id: { alphabet: crockford32, length: 8 }
+workflow:
+  statuses: [backlog, ready, in-progress, in-review, done, wont-do]
+  transitions:
+    backlog: [ready, wont-do]
+    ready: [in-progress, backlog]
+    in-progress: [in-review, ready]
+    in-review: [done, in-progress]
+  wip_limits: { in-progress: 2, in-review: 3 }
+estimation: { scale: [0, 1, 2, 3, 5, 8, 13, 21, "?", "coffee"] }
+sprints: { length_days: 14, naming: "{yyyy}-S{nn}" }

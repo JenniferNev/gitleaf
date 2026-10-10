@@ -1,0 +1,17 @@
+{
+  "name": "gitleaf-themes",
+  "displayName": "Gitleaf Themes",
+  "description": "Gitleaf Ink (dark) and Gitleaf Paper (light): contrast-checked color themes from the Gitleaf design system.",
+  "version": "0.1.0",
+  "publisher": "gitleaf",
+  "license": "MIT",
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Themes"],
+  "keywords": ["theme", "dark theme", "light theme", "accessible", "documentation", "markdown"],
+  "contributes": {
+    "themes": [
+      { "id": "Gitleaf Ink", "label": "Gitleaf Ink", "uiTheme": "vs-dark", "path": "./themes/gitleaf-ink-color-theme.json" },
+      { "id": "Gitleaf Paper", "label": "Gitleaf Paper", "uiTheme": "vs", "path": "./themes/gitleaf-paper-color-theme.json" }
+    ]
+  }
+}

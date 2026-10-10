@@ -18,7 +18,8 @@
     "gitleaf": "gitleaf",
     "check:identity": "bash scripts/check-identity.sh",
     "check:themes": "pnpm --filter gitleaf-themes run generate && git diff --exit-code -- packages/themes/themes",
-    "clean": "pnpm -r run clean"
+    "clean": "pnpm -r run clean",
+    "check:secrets": "gitleaks git --config .gitleaks.toml --redact --no-banner --exit-code 1 . && bash scripts/test-secret-guard.sh"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

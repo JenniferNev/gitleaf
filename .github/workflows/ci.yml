@@ -48,6 +48,20 @@ jobs:
       - name: Theme contrast (fails on any pair below target; committed themes must match)
         run: pnpm check:themes
 
+  secrets:
+    name: Secret scan (full history, pinned gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install pinned gitleaks (sha256 verified)
+        run: echo "GITLEAKS=$(bash scripts/install-gitleaks.sh)" >> "$GITHUB_ENV"
+      - name: Full-history scan
+        run: '"$GITLEAKS" git --config .gitleaks.toml --redact --no-banner --exit-code 1 .'
+      - name: Planted fake key is blocked (pre-commit mode and history)
+        run: bash scripts/test-secret-guard.sh
+
   dco:
     name: DCO sign-off
     runs-on: ubuntu-latest

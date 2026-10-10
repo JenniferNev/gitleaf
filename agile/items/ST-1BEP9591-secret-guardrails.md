@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-1BEP9591
 type: story
 title: "Secret-scanning guardrails (pre-commit + CI)"
-status: ready
+status: in-review
 priority: high
 epic: EP-0RQVJECD
 points: 3

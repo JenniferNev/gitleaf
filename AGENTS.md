@@ -10,7 +10,7 @@ Gitleaf is **agentic by design**. Copilot and Claude can create, edit, review an
 
 Scrum and agile ceremonies are an **optional module**, not the core.
 
-**Status:** pre-code, Phase 0 (Foundations). The backlog is in `agile/items/`, because this repo dogfoods the agile module's file format.
+**Status:** Phase 0 (Foundations). The monorepo scaffold exists (ST-Z3EH27SE); every other package is a stub until its story lands. The backlog is in `agile/items/`, because this repo dogfoods the agile module's file format.
 
 ## Read these first (source of truth, in order)
 
@@ -19,7 +19,7 @@ Scrum and agile ceremonies are an **optional module**, not the core.
 3. `docs/design/README.md`: design system, appearance packs and UI rules. Read it **before any UI work**.
 4. `agile/items/*.md`: the work items.
 
-## Repository layout (planned; update this when the scaffold lands)
+## Repository layout
 
 ```
 packages/
@@ -28,23 +28,30 @@ packages/
   format/        canonical Markdown/frontmatter parse + serialize
   index/         multi-repo doc index, links/backlinks, search, history projections
   provenance/    line attribution: git blame + commit trailers + Agent Trace notes
-  adapters/      fs-node, fs-vscode, git-vscode (vscode.git API), git-cli, forge-github, forge-azure-devops, secrets-*
+  adapters/      fs-node, fs-vscode, git-vscode (vscode.git API), git-cli, forge-github, forge-azure-devops, secrets-{infisical,openbao,sops}
   cli/           `gitleaf` binary
   mcp-server/    stdio MCP server (shared by Copilot and Claude)
   vscode/        the extension
   themes/        Gitleaf Ink and Paper color themes (separate extension)
-plugins/claude/  Claude Code / VS Code agent plugin: skills + .mcp.json
+plugins/claude/  Claude Code / VS Code agent plugin: skills + .mcp.json (lands in ST-S0F2W4BA)
 docs/            architecture, ADRs, design, research
 agile/           this repo's own backlog (agile module format)
 ```
 
-## Commands (placeholders until ST-Z3EH27SE is done; replace them with the real ones)
+## Commands
 
 ```
-pnpm install && pnpm build && pnpm test && pnpm lint
-pnpm gitleaf validate          # frontmatter, links, owners, secrets refs
-pnpm --filter themes generate  # regenerate color themes + contrast report
+pnpm install                 # Node >= 24, pnpm 10 (see packageManager in package.json)
+pnpm build                   # tsc for every package, in dependency order
+pnpm test                    # Vitest, runs against src/ (never a stale dist/)
+pnpm lint                    # ESLint (typed) + Prettier check. Includes the core dependency rule
+pnpm gitleaf validate        # frontmatter, links, owners, secret refs (stub until ST-PV13MRCY)
+pnpm check:identity          # scripts/check-identity.sh
+pnpm check:themes            # regenerate Gitleaf Ink/Paper, fail on contrast failures or drift (needs python3)
+pnpm --filter gitleaf-themes generate   # regenerate the themes + contrast report only
 ```
+
+CI runs all of these on every PR (`.github/workflows/ci.yml`, `azure-pipelines.yml`), plus a DCO sign-off check.
 
 ## Architecture rules (hard)
 

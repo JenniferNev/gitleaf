@@ -1,0 +1,29 @@
+Gitleaf
+Copyright (c) 2026 Gitleaf contributors
+
+Licensed under the MIT License. See LICENSE.
+
+This project bundles or references third-party works:
+
+Codicons
+  https://github.com/microsoft/vscode-codicons
+  Copyright (c) Microsoft Corporation
+  Icon artwork: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  https://creativecommons.org/licenses/by/4.0/
+  Code: MIT License
+
+Chakra Petch (font)
+  https://fonts.google.com/specimen/Chakra+Petch
+  Copyright 2018 The Chakra Petch Project Authors
+  SIL Open Font License, Version 1.1
+  https://openfontlicense.org/
+
+Poppins (font)
+  https://fonts.google.com/specimen/Poppins
+  Copyright 2020 The Poppins Project Authors
+  SIL Open Font License, Version 1.1
+  https://openfontlicense.org/
+
+"Visual Studio Code" and "VS Code" are trademarks of Microsoft Corporation.
+Gitleaf is not affiliated with or endorsed by Microsoft. The compatibility
+form "Gitleaf for VS Code" is used under the VS Code brand guidelines.

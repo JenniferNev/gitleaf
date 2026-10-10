@@ -237,7 +237,10 @@ def build(kind):
 def dk(c, t=4.6): return adjust_to(c, '#FFFFFF', t, 'darker')
 for kind, fname in (('dark', 'gitleaf-ink-color-theme.json'), ('light', 'gitleaf-paper-color-theme.json')):
     name, th = build(kind)
-    json.dump(th, open(f'{out}/{fname}', 'w'), indent=2)
+    with open(f'{out}/{fname}', 'w', newline='\n') as fh:
+        json.dump(th, fh, indent=2); fh.write('\n')
 fails = [r for r in report if r[3] < r[4]]
 for r in report: print(f"{r[0]:14} {r[1]:28} {r[2]}  {r[3]:5}  {'OK' if r[3]>=r[4] else 'FAIL (<'+str(r[4])+')'}")
 print('FAILS:', len(fails))
+# CI gate (ST-Z3EH27SE): any pair below its target fails the build.
+sys.exit(1 if fails else 0)

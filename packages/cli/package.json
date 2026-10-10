@@ -1,0 +1,27 @@
+{
+  "name": "@gitleaf/cli",
+  "version": "0.0.0",
+  "description": "The gitleaf command line.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@gitleaf/core": "workspace:*"
+  },
+  "bin": {
+    "gitleaf": "./bin/gitleaf.js"
+  }
+}

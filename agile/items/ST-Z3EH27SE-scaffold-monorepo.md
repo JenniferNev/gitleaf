@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-Z3EH27SE
 type: story
 title: Scaffold monorepo, CI and identity guard
-status: ready
+status: in-review
 priority: high
 epic: EP-0RQVJECD
 points: 3

@@ -1,0 +1,119 @@
+/*
+ * Gitleaf neutral tokens (Tier 1 semantic + Tier 2 component).
+ * Structure resolves to the host theme (--vscode-*); accents resolve to Gitleaf's
+ * contributed colors (gitleaf.<name> → --vscode-gitleaf-<name>, single dot).
+ * No color literal appears here or in any component stylesheet: hex lives in
+ * package.json (contributes.colors) and packages/themes/tokens only.
+ * Appearance packs override Tier 1 and Tier 2 tokens and nothing else.
+ */
+:root {
+  /* Tier 1: structure */
+  --gl-text: var(--vscode-foreground);
+  --gl-text-muted: var(--vscode-descriptionForeground);
+  --gl-text-disabled: var(--vscode-disabledForeground);
+  --gl-link: var(--vscode-textLink-foreground);
+  --gl-link-active: var(--vscode-textLink-activeForeground);
+  --gl-surface: transparent;
+  --gl-surface-raised: var(--vscode-editorWidget-background);
+  --gl-surface-hover: var(--vscode-list-hoverBackground);
+  --gl-surface-selected: var(--vscode-list-activeSelectionBackground);
+  --gl-text-selected: var(--vscode-list-activeSelectionForeground);
+  --gl-border: var(--vscode-widget-border, var(--vscode-panel-border));
+  --gl-focus: var(--vscode-focusBorder);
+  --gl-shadow: var(--vscode-widget-shadow);
+  --gl-font: var(--vscode-font-family);
+  --gl-font-size: var(--vscode-font-size);
+  --gl-font-mono: var(--vscode-editor-font-family);
+  --gl-font-display: var(--vscode-font-family);
+  --gl-button-bg: var(--vscode-button-background);
+  --gl-button-fg: var(--vscode-button-foreground);
+  --gl-button-hover-bg: var(--vscode-button-hoverBackground);
+  --gl-button-secondary-bg: var(--vscode-button-secondaryBackground);
+  --gl-button-secondary-fg: var(--vscode-button-secondaryForeground);
+  --gl-input-bg: var(--vscode-input-background);
+  --gl-input-fg: var(--vscode-input-foreground);
+  --gl-input-border: var(--vscode-input-border, var(--gl-border));
+  --gl-badge-bg: var(--vscode-badge-background);
+  --gl-badge-fg: var(--vscode-badge-foreground);
+  --gl-error: var(--vscode-errorForeground);
+  --gl-warning: var(--vscode-editorWarning-foreground);
+  --gl-info: var(--vscode-editorInfo-foreground);
+  --gl-success: var(--vscode-testing-iconPassed);
+
+  /* Tier 1: accents (contributed colors) */
+  --gl-provenance-human: var(--vscode-gitleaf-provenanceHuman);
+  --gl-provenance-agent: var(--vscode-gitleaf-provenanceAgent);
+  --gl-provenance-mixed: var(--vscode-gitleaf-provenanceMixed);
+  --gl-provenance-unknown: var(--vscode-gitleaf-provenanceUnknown);
+  --gl-review-draft: var(--vscode-gitleaf-reviewDraft);
+  --gl-review-open: var(--vscode-gitleaf-reviewOpen);
+  --gl-review-changes: var(--vscode-gitleaf-reviewChanges);
+  --gl-review-approved: var(--vscode-gitleaf-reviewApproved);
+  --gl-review-merged: var(--vscode-gitleaf-reviewMerged);
+  --gl-doc-draft: var(--vscode-gitleaf-docDraft);
+  --gl-doc-published: var(--vscode-gitleaf-docPublished);
+  --gl-doc-stale: var(--vscode-gitleaf-docStale);
+  --gl-doc-archived: var(--vscode-gitleaf-docArchived);
+  --gl-chart-1: var(--vscode-gitleaf-chart1);
+  --gl-chart-2: var(--vscode-gitleaf-chart2);
+  --gl-chart-3: var(--vscode-gitleaf-chart3);
+  --gl-chart-4: var(--vscode-gitleaf-chart4);
+  --gl-chart-5: var(--vscode-gitleaf-chart5);
+  --gl-chart-6: var(--vscode-gitleaf-chart6);
+  --gl-chart-lines: var(--vscode-charts-lines);
+
+  /* Tier 1: scales */
+  --gl-space-1: 2px;
+  --gl-space-2: 4px;
+  --gl-space-3: 6px;
+  --gl-space-4: 8px;
+  --gl-space-5: 12px;
+  --gl-space-6: 16px;
+  --gl-space-7: 20px;
+  --gl-space-8: 24px;
+  --gl-space-9: 32px;
+  --gl-radius-control: 2px;
+  --gl-radius-card: 4px;
+  --gl-radius-popover: 6px;
+  --gl-motion-fast: 100ms;
+  --gl-motion-normal: 150ms;
+  --gl-motion-celebrate: 400ms;
+
+  /* Tier 2: components (resolve to Tier 1 only) */
+  --gl-card-bg: var(--gl-surface-raised);
+  --gl-card-border: var(--gl-border);
+  --gl-card-radius: var(--gl-radius-card);
+  --gl-card-shadow: none;
+  --gl-card-padding: var(--gl-space-5);
+  --gl-chip-bg: var(--gl-badge-bg);
+  --gl-chip-fg: var(--gl-badge-fg);
+  --gl-chip-radius: var(--gl-radius-control);
+  --gl-pill-radius: 999px;
+  --gl-bubble-bg: var(--gl-surface-raised);
+  --gl-bubble-fg: var(--gl-text);
+  --gl-bubble-border: var(--gl-border);
+  --gl-bubble-radius: var(--gl-radius-popover);
+  --gl-bubble-tail: none;
+  --gl-diff-added: var(--gl-provenance-human);
+  --gl-diff-removed: var(--gl-error);
+  --gl-mascot-size: 0px;
+  --gl-mascot-display: none;
+  --gl-brand-gradient: none;
+  --gl-brand-glow: none;
+  --gl-voice-fg: var(--gl-text-muted);
+}
+
+body.vscode-high-contrast {
+  --gl-card-shadow: none;
+  --gl-brand-gradient: none;
+  --gl-brand-glow: none;
+  --gl-surface-raised: transparent;
+  --gl-card-border: var(--vscode-contrastBorder);
+  --gl-bubble-border: var(--vscode-contrastBorder);
+}
+
+body.vscode-reduce-motion {
+  --gl-motion-fast: 0ms;
+  --gl-motion-normal: 0ms;
+  --gl-motion-celebrate: 0ms;
+}

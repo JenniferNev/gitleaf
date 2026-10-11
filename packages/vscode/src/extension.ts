@@ -2,11 +2,12 @@
  * Gitleaf for VS Code: extension entry point.
  *
  * Registers the Gitleaf MCP server for Copilot through the
- * mcpServerDefinitionProviders contribution. Views, commands and the appearance
- * loader arrive with their stories.
+ * mcpServerDefinitionProviders contribution, and the appearance service
+ * (packs, token preview, Select Appearance). Views arrive with their stories.
  */
 import { join } from 'node:path';
 import * as vscode from 'vscode';
+import { AppearanceService } from './appearance/index.js';
 
 export const MCP_PROVIDER_ID = 'gitleaf.mcp';
 
@@ -30,9 +31,12 @@ export function serverDefinitions(
 }
 
 export function activate(context: vscode.ExtensionContext): void {
+  const output = vscode.window.createOutputChannel('Gitleaf');
   const changed = new vscode.EventEmitter<void>();
   context.subscriptions.push(
+    output,
     changed,
+    new AppearanceService(context, output),
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
       changed.fire();
     }),

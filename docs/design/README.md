@@ -7,7 +7,7 @@
 | Palette and foundations (W3C design tokens) | `packages/themes/tokens/palette.tokens.json` | ready |
 | Gitleaf Ink and Paper color themes (+ contrast generator) | `packages/themes/` | ready (0.1.0) |
 | **Design System artifact** (browsable reference) | `<paste the claude.ai Design System URL here>` | pending |
-| Implementation tokens | `packages/vscode/src/webview/styles/tokens.css` | pending (ST-TXRQTR8G) |
+| Implementation tokens (Tier 1 + 2) and contributed colors | `packages/vscode/media/tokens.css`, `packages/vscode/package.json` (`contributes.colors`) | ready (ST-TXRQTR8G) |
 
 ## Rules
 

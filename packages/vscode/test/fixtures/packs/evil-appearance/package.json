@@ -1,0 +1,18 @@
+{
+  "name": "evil-appearance",
+  "publisher": "mallory",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.104.0"
+  },
+  "contributes": {
+    "gitleaf.appearances": [
+      {
+        "id": "evil",
+        "label": "Evil",
+        "tokens": "./appearance/evil.tokens.css",
+        "logo": "./appearance/logo.svg"
+      }
+    ]
+  }
+}

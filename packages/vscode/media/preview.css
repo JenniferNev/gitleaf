@@ -1,0 +1,159 @@
+/* Token preview: component CSS uses --gl-* tokens only. */
+body {
+  font-family: var(--gl-font);
+  font-size: var(--gl-font-size);
+  color: var(--gl-text);
+  background: var(--gl-surface);
+  margin: 0;
+  padding: var(--gl-space-6);
+}
+h1,
+h2 {
+  font-family: var(--gl-font-display);
+  font-weight: 600;
+  margin: 0 0 var(--gl-space-4);
+}
+h1 {
+  font-size: 1.3em;
+}
+h2 {
+  font-size: 1em;
+  margin-top: var(--gl-space-8);
+}
+.meta {
+  color: var(--gl-text-muted);
+  margin-bottom: var(--gl-space-6);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--gl-space-3);
+}
+.token {
+  display: flex;
+  align-items: center;
+  gap: var(--gl-space-3);
+  padding: var(--gl-space-2) var(--gl-space-3);
+  border: 1px solid var(--gl-border);
+  border-radius: var(--gl-radius-control);
+  background: var(--gl-surface-raised);
+}
+.swatch {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: var(--gl-radius-control);
+  border: 1px solid var(--gl-border);
+}
+.name {
+  font-family: var(--gl-font-mono);
+  font-size: 0.9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card {
+  max-width: 520px;
+  background: var(--gl-card-bg);
+  border: 1px solid var(--gl-card-border);
+  border-radius: var(--gl-card-radius);
+  box-shadow: var(--gl-card-shadow);
+  padding: var(--gl-card-padding);
+  background-image: var(--gl-brand-gradient);
+}
+.card .title {
+  font-weight: 600;
+}
+.card .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gl-space-3);
+  margin-top: var(--gl-space-3);
+  align-items: center;
+}
+.chip {
+  font-family: var(--gl-font-mono);
+  font-size: 0.85em;
+  background: var(--gl-chip-bg);
+  color: var(--gl-chip-fg);
+  border-radius: var(--gl-chip-radius);
+  padding: 1px var(--gl-space-3);
+}
+.pill {
+  border-radius: var(--gl-pill-radius);
+  padding: 1px var(--gl-space-4);
+  border: 1px solid currentColor;
+  font-size: 0.85em;
+}
+.pill.approved {
+  color: var(--gl-review-approved);
+}
+.pill.open {
+  color: var(--gl-review-open);
+}
+.pill.stale {
+  color: var(--gl-doc-stale);
+}
+.share {
+  display: flex;
+  height: 8px;
+  border-radius: var(--gl-pill-radius);
+  overflow: hidden;
+  margin-top: var(--gl-space-4);
+}
+.share .human {
+  background: var(--gl-provenance-human);
+}
+.share .agent {
+  background: var(--gl-provenance-agent);
+}
+.share .mixed {
+  background: var(--gl-provenance-mixed);
+}
+.bubble {
+  display: inline-block;
+  max-width: 420px;
+  margin-top: var(--gl-space-6);
+  background: var(--gl-bubble-bg);
+  color: var(--gl-bubble-fg);
+  border: 1px solid var(--gl-bubble-border);
+  border-radius: var(--gl-bubble-radius);
+  padding: var(--gl-space-4) var(--gl-space-5);
+  box-shadow: var(--gl-brand-glow);
+}
+.bubble .voice {
+  color: var(--gl-voice-fg);
+  font-style: italic;
+}
+.mascot {
+  display: var(--gl-mascot-display);
+  width: var(--gl-mascot-size);
+  height: var(--gl-mascot-size);
+  vertical-align: middle;
+  margin-right: var(--gl-space-3);
+}
+button.primary {
+  background: var(--gl-button-bg);
+  color: var(--gl-button-fg);
+  border: none;
+  border-radius: var(--gl-radius-control);
+  padding: var(--gl-space-2) var(--gl-space-5);
+  font: inherit;
+  transition: background var(--gl-motion-normal);
+}
+button.primary:hover {
+  background: var(--gl-button-hover-bg);
+}
+button.primary:focus-visible {
+  outline: 1px solid var(--gl-focus);
+  outline-offset: 2px;
+}
+.notice {
+  margin-top: var(--gl-space-8);
+  color: var(--gl-text-muted);
+}
+@media (max-width: 360px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

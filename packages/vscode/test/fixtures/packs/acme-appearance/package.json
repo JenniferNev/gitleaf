@@ -1,0 +1,37 @@
+{
+  "name": "acme-appearance",
+  "displayName": "Acme appearance (test fixture)",
+  "publisher": "acme",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.104.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "gitleaf-appearance"
+  ],
+  "contributes": {
+    "gitleaf.appearances": [
+      {
+        "id": "acme",
+        "label": "Acme",
+        "description": "A neutral test pack: rounder cards and a mascot slot",
+        "tokens": "./appearance/acme.tokens.css",
+        "mascot": {
+          "dir": "./assets",
+          "map": "./appearance/mascot.map.json"
+        },
+        "copy": {
+          "en": "./appearance/copy.en.json"
+        },
+        "logo": "./assets/logo.svg"
+      }
+    ],
+    "configurationDefaults": {
+      "gitleaf.appearance": "acme.acme-appearance/acme"
+    }
+  }
+}

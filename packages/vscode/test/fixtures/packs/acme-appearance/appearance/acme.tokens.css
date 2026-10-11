@@ -1,0 +1,10 @@
+/* Acme test pack. MIT. Neutral shapes, no identity. */
+:root {
+  --gl-radius-card: 10px;
+  --gl-card-shadow: 0 2px 8px var(--gl-shadow);
+  --gl-mascot-size: 40px;
+  --gl-mascot-display: inline-block;
+}
+body.vscode-dark {
+  --gl-bubble-tail: url(../assets/tail.svg);
+}

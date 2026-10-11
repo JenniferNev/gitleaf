@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-TXRQTR8G
 type: story
 title: Appearance pack loader, neutral tokens and Select Appearance command
-status: backlog
+status: in-review
 priority: medium
 epic: EP-0RQVJECD
 points: 5

@@ -10,7 +10,7 @@ vi.mock('vscode', () => ({
     ) {}
   },
   EventEmitter: class {
-    event = () => undefined;
+    event = () => ({ dispose: () => undefined });
     fire(): void {
       // no-op
     }
@@ -21,7 +21,18 @@ vi.mock('vscode', () => ({
   workspace: {
     workspaceFolders: [],
     onDidChangeWorkspaceFolders: () => ({ dispose: () => undefined }),
+    onDidChangeConfiguration: () => ({ dispose: () => undefined }),
+    getConfiguration: () => ({ get: () => 'default', update: () => Promise.resolve() }),
   },
+  window: {
+    createOutputChannel: () => ({ appendLine: () => undefined, dispose: () => undefined }),
+  },
+  extensions: { all: [], onDidChange: () => ({ dispose: () => undefined }) },
+  commands: {
+    registerCommand: () => ({ dispose: () => undefined }),
+    executeCommand: () => Promise.resolve(),
+  },
+  Uri: { joinPath: () => ({}), file: () => ({}) },
   lm: { registerMcpServerDefinitionProvider: () => ({ dispose: () => undefined }) },
 }));
 

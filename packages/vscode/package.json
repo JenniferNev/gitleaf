@@ -35,6 +35,242 @@
       {
         "path": "./skills/docs-review/SKILL.md"
       }
+    ],
+    "colors": [
+      {
+        "id": "gitleaf.provenanceHuman",
+        "description": "Lines written by a person.",
+        "defaults": {
+          "dark": "#5EE6A8",
+          "light": "#158652",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.provenanceAgent",
+        "description": "Lines written by an agent.",
+        "defaults": {
+          "dark": "#CF3BF7",
+          "light": "#C00AF1",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.provenanceMixed",
+        "description": "Lines written by a person with agent help, or edited by both.",
+        "defaults": {
+          "dark": "#4AB3F8",
+          "light": "#0879C4",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.provenanceUnknown",
+        "description": "Lines whose origin is unknown or uncommitted.",
+        "defaults": {
+          "dark": "descriptionForeground",
+          "light": "descriptionForeground",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.reviewDraft",
+        "description": "Draft review or pull request.",
+        "defaults": {
+          "dark": "descriptionForeground",
+          "light": "descriptionForeground",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.reviewOpen",
+        "description": "Open review awaiting approval.",
+        "defaults": {
+          "dark": "#4AB3F8",
+          "light": "#0879C4",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.reviewChanges",
+        "description": "Review with changes requested.",
+        "defaults": {
+          "dark": "#FC4CBC",
+          "light": "#DE048F",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.reviewApproved",
+        "description": "Approved review.",
+        "defaults": {
+          "dark": "#5EE6A8",
+          "light": "#158652",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.reviewMerged",
+        "description": "Merged review.",
+        "defaults": {
+          "dark": "#B05FDC",
+          "light": "#962DCF",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.docDraft",
+        "description": "Doc in draft.",
+        "defaults": {
+          "dark": "descriptionForeground",
+          "light": "descriptionForeground",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.docPublished",
+        "description": "Published doc.",
+        "defaults": {
+          "dark": "#5EE6A8",
+          "light": "#158652",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.docStale",
+        "description": "Stale doc or overdue review.",
+        "defaults": {
+          "dark": "#F7F099",
+          "light": "#7F760A",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.docArchived",
+        "description": "Archived doc.",
+        "defaults": {
+          "dark": "disabledForeground",
+          "light": "disabledForeground",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.chart1",
+        "description": "Chart series 1.",
+        "defaults": {
+          "dark": "#4AB3F8",
+          "light": "#0879C4",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.chart2",
+        "description": "Chart series 2.",
+        "defaults": {
+          "dark": "#5EE6A8",
+          "light": "#158652",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.chart3",
+        "description": "Chart series 3.",
+        "defaults": {
+          "dark": "#FC4CBC",
+          "light": "#DE048F",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.chart4",
+        "description": "Chart series 4.",
+        "defaults": {
+          "dark": "#CF3BF7",
+          "light": "#C00AF1",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.chart5",
+        "description": "Chart series 5.",
+        "defaults": {
+          "dark": "#F7F099",
+          "light": "#7F760A",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      },
+      {
+        "id": "gitleaf.chart6",
+        "description": "Chart series 6.",
+        "defaults": {
+          "dark": "#B05FDC",
+          "light": "#962DCF",
+          "highContrast": "foreground",
+          "highContrastLight": "foreground"
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Gitleaf",
+      "properties": {
+        "gitleaf.appearance": {
+          "type": "string",
+          "default": "default",
+          "markdownDescription": "Appearance pack id (`<publisher>.<extension>/<id>`) or `default`. Packs may set their own default through `configurationDefaults`; a missing pack falls back to `default` silently (see the Gitleaf output channel).",
+          "scope": "application"
+        },
+        "gitleaf.mascot": {
+          "type": "string",
+          "enum": [
+            "subtle",
+            "playful",
+            "off"
+          ],
+          "default": "subtle",
+          "description": "How much an appearance pack's mascot shows up. Hidden under a screen reader.",
+          "scope": "application"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "gitleaf.selectAppearance",
+        "title": "Select Appearance",
+        "category": "Gitleaf"
+      },
+      {
+        "command": "gitleaf.showTokenPreview",
+        "title": "Show Token Preview",
+        "category": "Gitleaf"
+      },
+      {
+        "command": "gitleaf.findAppearancePacks",
+        "title": "Find Appearance Packs",
+        "category": "Gitleaf"
+      },
+      {
+        "command": "gitleaf.installAppearancePackFromVsix",
+        "title": "Install Appearance Pack from VSIX...",
+        "category": "Gitleaf"
+      }
     ]
   },
   "capabilities": {

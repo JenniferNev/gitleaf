@@ -15,3 +15,7 @@ The server never approves or merges pull requests.
 ## License
 
 MIT. Codicons (CC BY 4.0), Chakra Petch and Poppins (OFL) are credited in `NOTICE` at the repository root.
+
+## Appearance
+
+Gitleaf's panels follow your color theme for structure and use Gitleaf's contributed colors (`gitleaf.*`, overridable in `workbench.colorCustomizations`) for accents. **Appearance packs** are small extensions that restyle the panels with CSS tokens, SVG assets and copy, never code. Commands: **Gitleaf: Select Appearance** (live preview), **Gitleaf: Show Token Preview**, **Gitleaf: Find Appearance Packs**, **Gitleaf: Install Appearance Pack from VSIX…**. A rejected pack is explained in the Gitleaf output channel.

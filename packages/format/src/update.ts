@@ -4,6 +4,8 @@ import { parse } from './parse.js';
 import { inlineYaml } from './scalars.js';
 import type { FrontmatterPatch, FrontmatterValue, ParsedDoc } from './types.js';
 
+const BOM = '\uFEFF';
+
 interface Span {
   readonly key: string;
   /** Offset of the first character of the key. */
@@ -85,17 +87,19 @@ function replacementFor(value: FrontmatterValue, text: string, span: Span | unde
  * Applies `patch` to a document's frontmatter, touching only the keys named in
  * it. Each changed scalar or flow value rewrites exactly its own bytes, a new
  * key adds one line at its canonical position, and `undefined` removes the
- * key's line(s). Every other byte of the frontmatter and body is unchanged.
+ * key's line(s). Every other byte of the frontmatter and body is unchanged,
+ * except that CRLF line breaks inside the frontmatter block become LF.
  *
  * A document without frontmatter gains a canonical block when the patch sets a
  * key. Removing the last key leaves an empty block; the delimiters stay.
  */
 export function update(doc: ParsedDoc, patch: FrontmatterPatch): ParsedDoc {
   const { meta } = doc;
-  const eol = meta.eol;
+  // Gitleaf writes LF. The frontmatter block it rewrites is normalized; the body is copied as is.
+  const eol = '\n';
   if (meta.frontmatterError !== undefined)
     throw new Error(`cannot update: ${meta.frontmatterError}`);
-  let text = meta.hasFrontmatter ? meta.frontmatterText : '';
+  let text = meta.hasFrontmatter ? meta.frontmatterText.replaceAll('\r\n', eol) : '';
 
   for (const [key, value] of Object.entries(patch)) {
     const current = spans(text);
@@ -119,14 +123,8 @@ export function update(doc: ParsedDoc, patch: FrontmatterPatch): ParsedDoc {
     text = text.slice(0, at) + line + text.slice(at);
   }
 
-  const assembled =
-    '﻿'.repeat(meta.bom ? 1 : 0) +
-    '---' +
-    eol +
-    text +
-    '---' +
-    (meta.hasFrontmatter ? meta.closeEol : eol) +
-    doc.body;
+  const closeEol = meta.hasFrontmatter && meta.closeEol === '' ? '' : eol;
+  const assembled = (meta.bom ? BOM : '') + '---' + eol + text + '---' + closeEol + doc.body;
   const result = parse(assembled);
   if (result.meta.frontmatterError !== undefined) {
     throw new Error(`update produced invalid YAML: ${result.meta.frontmatterError}`);

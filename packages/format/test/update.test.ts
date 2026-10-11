@@ -93,12 +93,23 @@ describe('update changes only what it is asked to', () => {
     expect(parse(out).frontmatter).toMatchObject({ title: 'no', 'x-v': '1.0', 'x-z': '007' });
   });
 
-  it('never touches the body or the line ending', () => {
+  it('writes LF for the frontmatter block and never touches the body bytes', () => {
     const crlf = SAMPLE.replaceAll('\n', '\r\n');
-    const out = serialize(update(parse(crlf), { status: 'published', review_by: '2027-01-31' }));
-    expect(out).not.toMatch(/[^\r]\n/);
-    expect(parse(out).body).toBe('\r\nBody stays.\r\n');
+    const updated = update(parse(crlf), { status: 'published', review_by: '2027-01-31' });
+    const out = serialize(updated);
+    const [head, ...rest] = out.split('\n---');
+    expect(head).not.toContain('\r');
+    expect(updated.body).toBe('\r\nBody stays.\r\n');
+    expect(rest.join('\n---')).toBe('\n\r\nBody stays.\r\n');
     expect(parse(out).frontmatter).toMatchObject({ status: 'published', review_by: '2027-01-31' });
+    // The mixed result still round-trips byte for byte.
+    expect(serialize(parse(out))).toBe(out);
+  });
+
+  it('keeps a missing final newline after the closing delimiter', () => {
+    expect(serialize(update(parse('---\r\ntitle: a\r\n---'), { title: 'b' }))).toBe(
+      '---\ntitle: b\n---',
+    );
   });
 
   it('adds a frontmatter block to a plain document', () => {

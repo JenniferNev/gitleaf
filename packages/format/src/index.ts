@@ -6,8 +6,10 @@
  * - `update(doc, patch)` changes only the keys in the patch.
  * - `createDoc(body, frontmatter)` builds a new document in canonical form.
  *
- * Line endings: existing files keep their own (`\n` or `\r\n`); edits use the
- * file's own; new documents use `\n`. Bodies are never reflowed or re-indented.
+ * Line endings: `parse`/`serialize` keep a file's own (`\n` or `\r\n`) byte for
+ * byte. Whatever Gitleaf writes (`update`, `createDoc`) uses `\n`, and the
+ * frontmatter block is normalized on update. Bodies are never reflowed,
+ * re-indented or re-encoded.
  */
 export { parse } from './parse.js';
 export { serialize, createDoc, canonicalOrder } from './serialize.js';

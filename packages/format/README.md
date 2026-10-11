@@ -13,11 +13,12 @@ Canonical Markdown/frontmatter format: the one way Gitleaf reads and writes doc 
 
 | Case | Behavior |
 |---|---|
-| Existing file | Its own line ending is detected from the first line break and preserved everywhere, including in lines `update` writes. Nothing is normalized on read or write. |
+| Read and round-trip (`parse`, `serialize`) | The file's own line ending (LF or CRLF) is detected from the first line break and reproduced byte for byte. Nothing is normalized. |
+| Write (`update`) | The frontmatter block is written with LF, including lines that were CRLF before. The body is copied as is, so a CRLF body keeps its bytes. A missing final newline after the closing delimiter is kept. |
 | New document (`createDoc`) | LF, a trailing newline after the closing delimiter, block-style YAML, canonical key order. |
-| Mixed line endings | The first line break decides. Delimiters are recognized with that line ending only. |
+| Mixed line endings | The first line break decides where the delimiters are. Delimiters are recognized with that line ending only. |
 
-`gitleaf validate` may warn about CRLF; this package never changes it.
+`gitleaf validate` reports CRLF bodies; converting a body is a deliberate, separate edit.
 
 ## Collections
 

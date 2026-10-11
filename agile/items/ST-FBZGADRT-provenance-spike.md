@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-FBZGADRT
 type: spike
 title: "Provenance spike: blame + trailers + Agent Trace notes"
-status: backlog
+status: in-review
 priority: high
 epic: EP-0RQVJECD
 points: 5

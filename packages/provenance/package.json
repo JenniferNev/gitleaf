@@ -19,5 +19,8 @@
   },
   "dependencies": {
     "@gitleaf/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@gitleaf/adapter-git-cli": "workspace:*"
   }
 }

@@ -36,8 +36,8 @@ describe('GitCliVcs', () => {
     expect(await vcs.lastModified('tmp', 'whatever.md')).toBeUndefined();
   });
 
-  it('names the stories for unimplemented operations', async () => {
+  it('reports working-tree status', async () => {
     const vcs = new GitCliVcs([{ id: '.', rootPath: root }]);
-    await expect(vcs.status('.')).rejects.toThrow(/ST-FBZGADRT/);
+    expect(await vcs.status('.')).toEqual([{ repo: '.', path: 'untracked.md', status: 'added' }]);
   });
 });

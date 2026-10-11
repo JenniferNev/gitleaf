@@ -162,3 +162,35 @@ describe('gitleaf cli', () => {
     expect(m.out()).toContain('[config/repo-missing]');
   });
 });
+
+describe('gitleaf provenance', () => {
+  it('prints ranges and a summary for a file in a git repository', async () => {
+    const { execFileSync } = await import('node:child_process');
+    const root = await mkdtemp(join(tmpdir(), 'gitleaf-prov-cli-'));
+    const git = (...args: string[]) =>
+      execFileSync('git', ['-C', root, ...args], { stdio: 'pipe', encoding: 'utf8' }).trim();
+    git('init', '-q', '-b', 'main');
+    git('config', 'user.name', 'Sam');
+    git('config', 'user.email', 'sam@example.com');
+    git('config', 'commit.gpgsign', 'false');
+    await write(root, {
+      'gitleaf.yaml': 'schema: gitleaf/config@1\nroots: [{ path: docs }]\n',
+      'docs/a.md': 'one\ntwo\n',
+    });
+    git('add', '.');
+    git('commit', '-q', '-m', 'Add\n\nCo-Authored-By: Copilot <copilot@github.com>');
+    const t = io(root);
+    expect(await main(['provenance', 'docs/a.md'], t.io)).toBe(0);
+    const lines = t.out().trimEnd().split('\n');
+    expect(lines).toHaveLength(2);
+    expect(lines[0]).toMatch(
+      /^1-2\s+mixed\s+[0-9a-f]{7}\s+\d{4}-\d{2}-\d{2}\s+Sam \+ Copilot\s+\[trailer\]$/,
+    );
+    expect(lines[1]).toBe('docs/a.md: 2 lines, 0% human, 0% agent, 100% mixed, 0% unknown');
+    const j = io(root);
+    expect(await main(['provenance', '--json', 'docs/a.md'], j.io)).toBe(0);
+    expect((JSON.parse(j.out()) as { byKind: { mixed: number } }).byKind.mixed).toBe(2);
+    expect(await main(['provenance'], io(root).io)).toBe(2);
+    expect(await main(['provenance', '../outside.md'], io(root).io)).toBe(2);
+  });
+});

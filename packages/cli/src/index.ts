@@ -3,6 +3,7 @@
  * @gitleaf/index, formats in @gitleaf/format and @gitleaf/schema.
  */
 import { parseArgs } from 'node:util';
+import { formatProvenance, runProvenance } from './provenance.js';
 import { formatText, runValidate } from './validate.js';
 
 export interface Io {
@@ -22,6 +23,7 @@ const USAGE = `Usage: gitleaf <command> [options]
 
 Commands:
   validate [paths...]   Validate docs: frontmatter, links, owners, freshness, secret refs
+  provenance <file>     Who wrote each line: human, agent or mixed, from blame, trailers and Agent Trace notes
 
 Options:
   --config <file>       gitleaf.yaml to use (default: nearest one upwards from the cwd)
@@ -35,6 +37,7 @@ Exit codes: 0 ok, 1 findings, 2 usage or configuration error.
 `;
 
 export { runValidate, formatText } from './validate.js';
+export { runProvenance, formatProvenance } from './provenance.js';
 export type { ValidateReport } from './validate.js';
 
 function parseArgv(argv: readonly string[]) {
@@ -92,6 +95,23 @@ export async function main(argv: readonly string[], io: Io): Promise<number> {
       const configBroken = report.diagnostics.some((d) => d.rule.startsWith('config/'));
       if (configBroken) return 2;
       return report.errors > 0 || (values.strict && report.warnings > 0) ? 1 : 0;
+    }
+    case 'provenance': {
+      const file = rest[0];
+      if (file === undefined || rest.length !== 1) {
+        io.err.write('gitleaf provenance: expected exactly one file\n');
+        return 2;
+      }
+      try {
+        const result = await runProvenance({ cwd: io.cwd ?? process.cwd(), file });
+        io.out.write(values.json ? `${JSON.stringify(result)}\n` : formatProvenance(result));
+        return 0;
+      } catch (error) {
+        io.err.write(
+          `gitleaf provenance: ${error instanceof Error ? error.message : String(error)}\n`,
+        );
+        return 2;
+      }
     }
     default:
       io.err.write(`gitleaf: unknown command "${command}"\n`);

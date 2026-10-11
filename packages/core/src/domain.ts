@@ -75,3 +75,31 @@ export interface SecretRef {
   readonly uri: `secret://${string}`;
   readonly description?: string;
 }
+
+export type Severity = 'error' | 'warning';
+
+/** One finding from validation or docs-health, addressed to a file and line. */
+export interface Diagnostic {
+  readonly repo: Repo['id'];
+  readonly path: RepoRelativePath;
+  /** 1-based. Line 1 when the finding concerns the whole file. */
+  readonly line: number;
+  /** 1-based, when known. */
+  readonly column?: number;
+  readonly severity: Severity;
+  /** Stable rule id, `links/broken`. */
+  readonly rule: string;
+  readonly message: string;
+}
+
+/** A folder of docs inside a repository, with glob patterns relative to that folder. */
+export interface DocRootSpec {
+  readonly path: RepoRelativePath;
+  readonly include: readonly string[];
+  readonly exclude: readonly string[];
+}
+
+export interface FileStat {
+  readonly mtime: Date;
+  readonly size: number;
+}

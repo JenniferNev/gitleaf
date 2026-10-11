@@ -19,7 +19,12 @@
     "clean": "rm -rf dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@gitleaf/core": "workspace:*"
+    "@gitleaf/adapter-fs-node": "workspace:*",
+    "@gitleaf/adapter-git-cli": "workspace:*",
+    "@gitleaf/core": "workspace:*",
+    "@gitleaf/index": "workspace:*",
+    "@gitleaf/schema": "workspace:*",
+    "yaml": "^2.9.1"
   },
   "bin": {
     "gitleaf": "./bin/gitleaf.js"

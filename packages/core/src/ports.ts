@@ -5,6 +5,8 @@
 import type {
   Change,
   Doc,
+  DocRootSpec,
+  FileStat,
   LineOwner,
   Repo,
   RepoRelativePath,
@@ -14,14 +16,19 @@ import type {
 
 export interface WorkspaceStore {
   listRepos(): Promise<readonly Repo[]>;
-  listDocs(repo: Repo['id']): Promise<readonly RepoRelativePath[]>;
+  /** Files under a doc root, as repo-relative paths with `/` separators, sorted. */
+  listFiles(repo: Repo['id'], root: DocRootSpec): Promise<readonly RepoRelativePath[]>;
   readText(repo: Repo['id'], path: RepoRelativePath): Promise<string>;
   writeText(repo: Repo['id'], path: RepoRelativePath, text: string): Promise<void>;
+  exists(repo: Repo['id'], path: RepoRelativePath): Promise<boolean>;
+  stat(repo: Repo['id'], path: RepoRelativePath): Promise<FileStat | undefined>;
 }
 
 /** Local version control. Implemented by `vscode.git` in the extension and by the git CLI elsewhere. */
 export interface VcsPort {
   status(repo: Repo['id']): Promise<readonly Change[]>;
+  /** Commit date of the last change to a path, or `undefined` when untracked or not in a repository. */
+  lastModified(repo: Repo['id'], path: RepoRelativePath): Promise<Date | undefined>;
   blame(repo: Repo['id'], path: RepoRelativePath): Promise<readonly LineOwner[]>;
   commitTrailers(
     repo: Repo['id'],

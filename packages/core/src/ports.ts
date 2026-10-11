@@ -3,11 +3,11 @@
  * See the hexagonal-monorepo ADR and docs/architecture.md ("Ports").
  */
 import type {
+  BlameLine,
   Change,
-  Doc,
+  DocProvenance,
   DocRootSpec,
   FileStat,
-  LineOwner,
   Repo,
   RepoRelativePath,
   Review,
@@ -29,11 +29,15 @@ export interface VcsPort {
   status(repo: Repo['id']): Promise<readonly Change[]>;
   /** Commit date of the last change to a path, or `undefined` when untracked or not in a repository. */
   lastModified(repo: Repo['id'], path: RepoRelativePath): Promise<Date | undefined>;
-  blame(repo: Repo['id'], path: RepoRelativePath): Promise<readonly LineOwner[]>;
+  /** `git blame --porcelain` for the working-tree file. */
+  blame(repo: Repo['id'], path: RepoRelativePath): Promise<readonly BlameLine[]>;
+  /** Parsed trailers of a commit message: key → values, keys lower-cased. */
   commitTrailers(
     repo: Repo['id'],
     commit: string,
   ): Promise<Readonly<Record<string, readonly string[]>>>;
+  /** Text of a git note on a commit under `refs/notes/<ref>`, or undefined when there is none. */
+  note(repo: Repo['id'], commit: string, ref: string): Promise<string | undefined>;
 }
 
 /** Forge operations. Approve and merge are deliberately absent: agents never do those. */
@@ -43,7 +47,7 @@ export interface ForgePort {
 }
 
 export interface ProvenancePort {
-  lineOwners(doc: Doc): Promise<readonly LineOwner[]>;
+  provenance(repo: Repo['id'], path: RepoRelativePath): Promise<DocProvenance>;
 }
 
 /** Metadata only. No method on this port ever returns a secret value. */

@@ -39,7 +39,30 @@ export interface Doc {
 
 export type ContributorKind = 'human' | 'agent' | 'mixed' | 'unknown';
 
-/** Who owns a range of lines in a doc. Format details are settled by the ST-FBZGADRT spike. */
+/** One line of `git blame --porcelain`: which commit last touched it and where it was then. */
+export interface BlameLine {
+  /** 1-based line in the current file. */
+  readonly line: number;
+  /** 1-based line in the file as of `commit`. Needed to look up Agent Trace ranges. */
+  readonly originalLine: number;
+  /** 40-char SHA, or all zeros for uncommitted lines. */
+  readonly commit: string;
+  readonly author: string;
+  readonly authorEmail: string;
+  readonly authorTime: Date;
+  readonly summary: string;
+}
+
+/** Where a LineOwner's classification came from, strongest first. */
+export type ProvenanceSource = 'agent-trace' | 'trailer' | 'author' | 'blame' | 'uncommitted';
+
+/**
+ * Who owns a range of lines in a doc. Computed from three layers:
+ * 1. `git blame` for commit and author per line;
+ * 2. commit trailers (`Co-authored-by` with an agent identity) for agent involvement per commit;
+ * 3. Agent Trace records in `refs/notes/ai` for line-precise human/AI splits.
+ * Approvals and the pull request come from the forge, when known.
+ */
 export interface LineOwner {
   /** 1-based, inclusive. */
   readonly startLine: number;
@@ -47,11 +70,23 @@ export interface LineOwner {
   readonly endLine: number;
   readonly kind: ContributorKind;
   readonly author: string;
-  /** Model or agent name when `kind` is `agent` or `mixed`. */
+  readonly authorEmail?: string;
+  /** Model or agent name when `kind` is `agent` or `mixed`: `anthropic/claude-opus-4-5`, `Copilot`. */
   readonly agent?: string;
   readonly commit: string;
+  readonly commitDate?: Date;
+  readonly source: ProvenanceSource;
   readonly pullRequest?: string;
   readonly approvedBy?: readonly string[];
+}
+
+/** Per-doc provenance: owners plus a line count per contributor kind. */
+export interface DocProvenance {
+  readonly repo: Repo['id'];
+  readonly path: RepoRelativePath;
+  readonly owners: readonly LineOwner[];
+  readonly lines: number;
+  readonly byKind: Readonly<Record<ContributorKind, number>>;
 }
 
 export type ReviewState = 'draft' | 'open' | 'changes-requested' | 'approved' | 'merged';

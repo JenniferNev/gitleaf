@@ -115,6 +115,9 @@ importers:
       '@gitleaf/index':
         specifier: workspace:*
         version: link:../index
+      '@gitleaf/provenance':
+        specifier: workspace:*
+        version: link:../provenance
       '@gitleaf/schema':
         specifier: workspace:*
         version: link:../schema
@@ -163,6 +166,10 @@ importers:
       '@gitleaf/core':
         specifier: workspace:*
         version: link:../core
+    devDependencies:
+      '@gitleaf/adapter-git-cli':
+        specifier: workspace:*
+        version: link:../adapters/git-cli
 
   packages/schema:
     dependencies:

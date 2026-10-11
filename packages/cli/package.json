@@ -23,6 +23,7 @@
     "@gitleaf/adapter-git-cli": "workspace:*",
     "@gitleaf/core": "workspace:*",
     "@gitleaf/index": "workspace:*",
+    "@gitleaf/provenance": "workspace:*",
     "@gitleaf/schema": "workspace:*",
     "yaml": "^2.9.1"
   },

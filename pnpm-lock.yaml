@@ -218,12 +218,27 @@ importers:
 
   packages/vscode:
     dependencies:
+      '@gitleaf/adapter-fs-node':
+        specifier: workspace:*
+        version: link:../adapters/fs-node
+      '@gitleaf/adapter-git-cli':
+        specifier: workspace:*
+        version: link:../adapters/git-cli
       '@gitleaf/core':
         specifier: workspace:*
         version: link:../core
+      '@gitleaf/format':
+        specifier: workspace:*
+        version: link:../format
+      '@gitleaf/index':
+        specifier: workspace:*
+        version: link:../index
       '@gitleaf/mcp-server':
         specifier: workspace:*
         version: link:../mcp-server
+      '@gitleaf/schema':
+        specifier: workspace:*
+        version: link:../schema
     devDependencies:
       '@types/vscode':
         specifier: ^1.104.0

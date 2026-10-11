@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-S0F2W4BA
 type: story
 title: "MCP server v0 for Copilot and Claude (search, read, validate)"
-status: backlog
+status: in-review
 priority: high
 epic: EP-0RQVJECD
 points: 5

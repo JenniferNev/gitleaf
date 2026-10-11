@@ -1,11 +1,9 @@
-import { existsSync } from 'node:fs';
-import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
-import { NodeWorkspaceStore } from '@gitleaf/adapter-fs-node';
+import { isAbsolute, relative, resolve, sep } from 'node:path';
+import { loadWorkspace, NodeWorkspaceStore } from '@gitleaf/adapter-fs-node';
 import { GitCliVcs } from '@gitleaf/adapter-git-cli';
 import type { Diagnostic, Repo } from '@gitleaf/core';
-import { buildIndex, rootsOf, validateIndex, type DocIndex, type IndexedDoc } from '@gitleaf/index';
+import { buildIndex, validateIndex, type DocIndex, type IndexedDoc } from '@gitleaf/index';
 import type { GitleafConfig, Root } from '@gitleaf/schema';
-import { loadConfig } from './config.js';
 
 export interface ValidateOptions {
   readonly cwd: string;
@@ -23,30 +21,13 @@ export interface ValidateReport {
 
 /** Runs every docs-health rule over the workspace described by gitleaf.yaml. */
 export async function runValidate(options: ValidateOptions): Promise<ValidateReport> {
-  const loaded = loadConfig(options.cwd, options.configPath);
-  const repos: Repo[] = [{ id: '.', rootPath: loaded.repoRoot }];
+  const loaded = loadWorkspace(options.cwd, options.configPath);
+  const { repos } = loaded;
   const diagnostics: Diagnostic[] = [...loaded.diagnostics];
   const loadedConfig: GitleafConfig = loaded.config ?? {
     schema: 'gitleaf/config@1',
     roots: [{ path: '.', include: [] }],
   };
-
-  for (const { repo } of rootsOf(loadedConfig)) {
-    if (repo === '.' || repos.some((r) => r.id === repo)) continue;
-    const rootPath = resolve(dirname(loaded.repoRoot), repo);
-    if (!existsSync(rootPath)) {
-      diagnostics.push({
-        repo: '.',
-        path: 'gitleaf.yaml',
-        line: 1,
-        severity: 'error',
-        rule: 'config/repo-missing',
-        message: `repository "${repo}" not found at ${rootPath}`,
-      });
-      continue;
-    }
-    repos.push({ id: repo, rootPath });
-  }
 
   const store = new NodeWorkspaceStore(repos);
   const vcs = new GitCliVcs(repos);

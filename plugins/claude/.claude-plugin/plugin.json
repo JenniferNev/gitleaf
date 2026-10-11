@@ -1,0 +1,8 @@
+{
+  "name": "gitleaf",
+  "version": "0.0.0",
+  "description": "Documentation as Markdown in git: search, read and validate docs through the Gitleaf MCP server, and review doc changes with the docs-review skill.",
+  "author": { "name": "Gitleaf contributors" },
+  "license": "MIT",
+  "keywords": ["documentation", "markdown", "git", "provenance"]
+}

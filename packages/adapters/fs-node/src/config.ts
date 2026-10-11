@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import type { Diagnostic } from '@gitleaf/core';
+import type { Diagnostic, Repo } from '@gitleaf/core';
 import { validate, type GitleafConfig } from '@gitleaf/schema';
 import { parse as parseYaml } from 'yaml';
 
@@ -107,4 +107,38 @@ function lineOf(text: string, pointer: string): number {
   if (!key) return 1;
   const idx = text.split('\n').findIndex((l) => l.startsWith(`${key}:`));
   return idx === -1 ? 1 : idx + 1;
+}
+
+export interface Workspace extends LoadedConfig {
+  /** `.` plus every sibling repository named by a root, in declaration order. */
+  readonly repos: readonly Repo[];
+}
+
+/**
+ * Loads gitleaf.yaml and resolves the repositories it refers to. A root's
+ * `repo` is a path relative to the parent folder of the current repository.
+ * Missing repositories become diagnostics and are left out of `repos`.
+ */
+export function loadWorkspace(cwd: string, explicitPath?: string): Workspace {
+  const loaded = loadConfig(cwd, explicitPath);
+  const repos: Repo[] = [{ id: '.', rootPath: loaded.repoRoot }];
+  const diagnostics: Diagnostic[] = [...loaded.diagnostics];
+  for (const root of loaded.config?.roots ?? []) {
+    const id = root.repo ?? '.';
+    if (id === '.' || repos.some((r) => r.id === id)) continue;
+    const rootPath = resolve(dirname(loaded.repoRoot), id);
+    if (!existsSync(rootPath)) {
+      diagnostics.push({
+        repo: '.',
+        path: CONFIG_FILE,
+        line: 1,
+        severity: 'error',
+        rule: 'config/repo-missing',
+        message: `repository "${id}" not found at ${rootPath}`,
+      });
+      continue;
+    }
+    repos.push({ id, rootPath });
+  }
+  return { ...loaded, repos, diagnostics };
 }

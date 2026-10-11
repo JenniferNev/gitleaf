@@ -1,0 +1,17 @@
+{
+  "name": "gitleaf",
+  "owner": { "name": "Gitleaf contributors", "url": "https://github.com/JenniferNev/gitleaf" },
+  "metadata": {
+    "description": "Gitleaf: documentation as Markdown in git, searchable, validated and reviewable by agents under human review.",
+    "version": "0.0.0"
+  },
+  "plugins": [
+    {
+      "name": "gitleaf",
+      "source": "./plugins/claude",
+      "description": "Gitleaf MCP server (docs_search, docs_read, docs_validate) and the docs-review skill.",
+      "version": "0.0.0",
+      "category": "documentation"
+    }
+  ]
+}

@@ -6,3 +6,7 @@ coverage/
 __pycache__/
 .DS_Store
 .tools/
+
+# Build outputs copied into the plugin and the extension
+plugins/claude/server/
+packages/vscode/skills/

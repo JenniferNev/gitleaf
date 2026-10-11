@@ -1,8 +1,8 @@
 import { relative, resolve } from 'node:path';
+import { loadConfig } from '@gitleaf/adapter-fs-node';
 import { GitCliVcs } from '@gitleaf/adapter-git-cli';
 import type { DocProvenance, LineOwner } from '@gitleaf/core';
 import { GitProvenance } from '@gitleaf/provenance';
-import { loadConfig } from './config.js';
 
 export interface ProvenanceOptions {
   readonly cwd: string;

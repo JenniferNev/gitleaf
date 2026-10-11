@@ -5,3 +5,5 @@ packages/themes/themes/*.json
 *.md
 agile/
 docs/
+plugins/claude/server
+packages/vscode/skills

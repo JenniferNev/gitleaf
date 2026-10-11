@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-96WHP0KK
 type: story
 title: Canonical Markdown/frontmatter serializer with golden tests
-status: in-review
+status: done
 priority: high
 epic: EP-0RQVJECD
 points: 8

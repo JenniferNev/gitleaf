@@ -16,6 +16,8 @@ export default tseslint.config(
       'packages/themes/**',
       '**/*.d.ts',
       '**/src/generated/**',
+      'plugins/claude/server/**',
+      'packages/vscode/skills/**',
     ],
   },
   js.configs.recommended,
@@ -75,7 +77,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ['eslint.config.js', 'vitest.config.ts', 'packages/*/bin/*.js'],
+    files: [
+      'eslint.config.js',
+      'vitest.config.ts',
+      'packages/*/bin/*.js',
+      'packages/*/scripts/*.mjs',
+    ],
     extends: [tseslint.configs.disableTypeChecked],
   },
   prettier,

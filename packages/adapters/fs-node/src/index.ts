@@ -6,6 +6,9 @@ import { access, glob, readFile, stat, writeFile } from 'node:fs/promises';
 import { posix, resolve, sep } from 'node:path';
 import type { DocRootSpec, FileStat, Repo, RepoRelativePath, WorkspaceStore } from '@gitleaf/core';
 
+export { CONFIG_FILE, findConfig, loadConfig, loadWorkspace } from './config.js';
+export type { LoadedConfig, Workspace } from './config.js';
+
 export class NodeWorkspaceStore implements WorkspaceStore {
   readonly #repos: ReadonlyMap<string, Repo>;
 

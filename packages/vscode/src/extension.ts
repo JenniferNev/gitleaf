@@ -1,17 +1,55 @@
 /**
  * Gitleaf for VS Code: extension entry point.
  *
- * Scaffold stub from ST-Z3EH27SE. Contributions (views, commands, the MCP server
- * definition provider and the appearance loader) arrive with their stories.
- * The packaging format (bundler, CJS vs ESM output) is decided in ST-TXRQTR8G,
- * the first story that ships a webview.
+ * Registers the Gitleaf MCP server for Copilot through the
+ * mcpServerDefinitionProviders contribution. Views, commands and the appearance
+ * loader arrive with their stories.
  */
-import type { ExtensionContext } from 'vscode';
+import { join } from 'node:path';
+import * as vscode from 'vscode';
 
-export function activate(_context: ExtensionContext): void {
-  // Nothing to register yet.
+export const MCP_PROVIDER_ID = 'gitleaf.mcp';
+
+/** One server definition per workspace folder, so each repo's gitleaf.yaml is honored. */
+export function serverDefinitions(
+  extensionPath: string,
+  folders: readonly { readonly name: string; readonly fsPath: string }[],
+): vscode.McpStdioServerDefinition[] {
+  const server = join(extensionPath, 'dist', 'gitleaf-mcp.js');
+  return folders.map(
+    (f) =>
+      new vscode.McpStdioServerDefinition(
+        folders.length === 1 ? 'Gitleaf' : `Gitleaf (${f.name})`,
+        'node',
+        [server],
+        {
+          GITLEAF_CWD: f.fsPath,
+        },
+      ),
+  );
+}
+
+export function activate(context: vscode.ExtensionContext): void {
+  const changed = new vscode.EventEmitter<void>();
+  context.subscriptions.push(
+    changed,
+    vscode.workspace.onDidChangeWorkspaceFolders(() => {
+      changed.fire();
+    }),
+    vscode.lm.registerMcpServerDefinitionProvider(MCP_PROVIDER_ID, {
+      onDidChangeMcpServerDefinitions: changed.event,
+      provideMcpServerDefinitions: () =>
+        serverDefinitions(
+          context.extensionPath,
+          (vscode.workspace.workspaceFolders ?? []).map((f) => ({
+            name: f.name,
+            fsPath: f.uri.fsPath,
+          })),
+        ),
+    }),
+  );
 }
 
 export function deactivate(): void {
-  // Nothing to dispose yet.
+  // Nothing to dispose beyond context.subscriptions.
 }

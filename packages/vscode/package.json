@@ -8,7 +8,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.104.0"
   },
   "categories": [
     "Other"
@@ -21,8 +21,22 @@
     "agents"
   ],
   "main": "./dist/extension.js",
-  "activationEvents": [],
-  "contributes": {},
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "gitleaf.mcp",
+        "label": "Gitleaf"
+      }
+    ],
+    "chatSkills": [
+      {
+        "path": "./skills/docs-review/SKILL.md"
+      }
+    ]
+  },
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": "limited",
@@ -31,13 +45,22 @@
     "virtualWorkspaces": false
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "clean": "rm -rf dist *.tsbuildinfo"
+    "build": "node scripts/build.mjs",
+    "build:production": "node scripts/build.mjs --production",
+    "package": "pnpm run build:production && npx --yes @vscode/vsce@4 package --no-dependencies -o gitleaf.vsix",
+    "clean": "rm -rf dist skills *.vsix *.tsbuildinfo"
   },
   "dependencies": {
-    "@gitleaf/core": "workspace:*"
+    "@gitleaf/core": "workspace:*",
+    "@gitleaf/mcp-server": "workspace:*"
   },
   "devDependencies": {
-    "@types/vscode": "^1.90.0"
-  }
+    "@types/vscode": "^1.104.0",
+    "esbuild": "^0.28.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JenniferNev/gitleaf"
+  },
+  "extensionDependencies": []
 }

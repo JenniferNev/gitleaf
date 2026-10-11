@@ -33,7 +33,7 @@ packages/
   mcp-server/    stdio MCP server (shared by Copilot and Claude)
   vscode/        the extension
   themes/        Gitleaf Ink and Paper color themes (separate extension)
-plugins/claude/  Claude Code / VS Code agent plugin: skills + .mcp.json (lands in ST-S0F2W4BA)
+plugins/claude/  Claude Code / VS Code agent plugin: skills + .mcp.json (server bundle is a build output)
 docs/            architecture, ADRs, design, research
 agile/           this repo's own backlog (agile module format)
 ```

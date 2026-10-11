@@ -11,13 +11,23 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@gitleaf/core": "workspace:*"
+    "@gitleaf/adapter-fs-node": "workspace:*",
+    "@gitleaf/adapter-git-cli": "workspace:*",
+    "@gitleaf/core": "workspace:*",
+    "@gitleaf/index": "workspace:*",
+    "@gitleaf/schema": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^4.6.6"
+  },
+  "bin": {
+    "gitleaf-mcp": "./bin/gitleaf-mcp.js"
   }
 }

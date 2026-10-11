@@ -1,6 +1,17 @@
 /**
- * Stdio MCP server shared by Copilot and Claude.
- *
- * Scaffold stub from ST-Z3EH27SE. The implementation lands in ST-S0F2W4BA.
+ * Stdio MCP server shared by Copilot (through the extension's
+ * mcpServerDefinitionProvider) and Claude Code (through plugins/claude/.mcp.json).
  */
-export const PACKAGE = '@gitleaf/mcp-server' as const;
+export {
+  createServer,
+  GitleafTools,
+  TOOLS,
+  REFUSAL_MESSAGE,
+  SERVER_NAME,
+  SERVER_VERSION,
+  untrusted,
+} from './server.js';
+export type { ServerDeps } from './server.js';
+export { search } from './search.js';
+export type { SearchHit } from './search.js';
+export { depsFor, main } from './bin.js';

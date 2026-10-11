@@ -18,6 +18,8 @@
     "clean": "rm -rf dist *.tsbuildinfo"
   },
   "dependencies": {
-    "@gitleaf/core": "workspace:*"
+    "@gitleaf/core": "workspace:*",
+    "@gitleaf/schema": "workspace:*",
+    "yaml": "^2.9.1"
   }
 }

@@ -8,6 +8,7 @@
 import { join } from 'node:path';
 import * as vscode from 'vscode';
 import { AppearanceService } from './appearance/index.js';
+import { WorkspaceService } from './workspace/index.js';
 
 export const MCP_PROVIDER_ID = 'gitleaf.mcp';
 
@@ -37,6 +38,7 @@ export function activate(context: vscode.ExtensionContext): void {
     output,
     changed,
     new AppearanceService(context, output),
+    new WorkspaceService(output),
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
       changed.fire();
     }),

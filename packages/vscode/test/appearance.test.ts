@@ -136,7 +136,7 @@ describe('webview CSS rules', () => {
   it('component CSS has no color literals or font stacks; only tokens.css maps to the host theme', () => {
     const literal =
       /#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(|(?<=[:\s(,])(?:red|blue|green|white|black|gray|grey|orange|purple|pink|yellow)(?=[\s;),])/i;
-    for (const file of readdirSync(media)) {
+    for (const file of readdirSync(media).filter((f) => f.endsWith('.css'))) {
       const css = readFileSync(join(media, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
       expect(literal.test(css), `${file} must not contain color literals`).toBe(false);
       if (file !== 'tokens.css') {

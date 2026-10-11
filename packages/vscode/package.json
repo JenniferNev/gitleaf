@@ -22,7 +22,9 @@
   ],
   "main": "./dist/extension.js",
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "workspaceContains:gitleaf.yaml",
+    "onView:gitleaf.docs"
   ],
   "contributes": {
     "mcpServerDefinitionProviders": [
@@ -252,6 +254,34 @@
     },
     "commands": [
       {
+        "command": "gitleaf.initializeWorkspace",
+        "title": "Initialize Workspace",
+        "category": "Gitleaf",
+        "enablement": "isWorkspaceTrusted"
+      },
+      {
+        "command": "gitleaf.refreshDocs",
+        "title": "Refresh",
+        "category": "Gitleaf",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "gitleaf.validateWorkspace",
+        "title": "Validate Docs",
+        "category": "Gitleaf"
+      },
+      {
+        "command": "gitleaf.openPreview",
+        "title": "Open Preview",
+        "category": "Gitleaf",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "gitleaf.revealInExplorer",
+        "title": "Reveal in Explorer View",
+        "category": "Gitleaf"
+      },
+      {
         "command": "gitleaf.selectAppearance",
         "title": "Select Appearance",
         "category": "Gitleaf"
@@ -271,7 +301,67 @@
         "title": "Install Appearance Pack from VSIX...",
         "category": "Gitleaf"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "gitleaf",
+          "title": "Gitleaf",
+          "icon": "media/icons/gitleaf.svg"
+        }
+      ]
+    },
+    "views": {
+      "gitleaf": [
+        {
+          "id": "gitleaf.docs",
+          "name": "Docs",
+          "icon": "media/icons/gitleaf.svg",
+          "contextualTitle": "Gitleaf docs"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "gitleaf.docs",
+        "contents": "No gitleaf.yaml found in this workspace.\n[Initialize Workspace](command:gitleaf.initializeWorkspace)\nGitleaf keeps documentation as Markdown in git, validated and attributable line by line.",
+        "when": "workspaceFolderCount > 0"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "gitleaf.refreshDocs",
+          "when": "view == gitleaf.docs",
+          "group": "navigation"
+        },
+        {
+          "command": "gitleaf.initializeWorkspace",
+          "when": "view == gitleaf.docs && isWorkspaceTrusted"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "gitleaf.openPreview",
+          "when": "view == gitleaf.docs && viewItem == doc",
+          "group": "inline"
+        },
+        {
+          "command": "gitleaf.revealInExplorer",
+          "when": "view == gitleaf.docs && viewItem == doc"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "gitleaf.openPreview",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "gitleaf.revealInExplorer",
+          "when": "false"
+        }
+      ]
+    }
   },
   "capabilities": {
     "untrustedWorkspaces": {
@@ -287,8 +377,13 @@
     "clean": "rm -rf dist skills *.vsix *.tsbuildinfo"
   },
   "dependencies": {
+    "@gitleaf/adapter-fs-node": "workspace:*",
+    "@gitleaf/adapter-git-cli": "workspace:*",
     "@gitleaf/core": "workspace:*",
-    "@gitleaf/mcp-server": "workspace:*"
+    "@gitleaf/format": "workspace:*",
+    "@gitleaf/index": "workspace:*",
+    "@gitleaf/mcp-server": "workspace:*",
+    "@gitleaf/schema": "workspace:*"
   },
   "devDependencies": {
     "@types/vscode": "^1.104.0",

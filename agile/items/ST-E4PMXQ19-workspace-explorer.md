@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-E4PMXQ19
 type: story
 title: "Workspace init, docs explorer and problems on save"
-status: in-review
+status: done
 priority: high
 epic: EP-XWARXVAT
 points: 8

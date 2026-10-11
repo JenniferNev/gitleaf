@@ -92,11 +92,19 @@ export interface DocProvenance {
 export type ReviewState = 'draft' | 'open' | 'changes-requested' | 'approved' | 'merged';
 
 export interface Review {
+  /** Forge-local identifier: the pull request number on GitHub. */
   readonly id: string;
   readonly repo: Repo['id'];
   readonly title: string;
   readonly state: ReviewState;
   readonly url?: string;
+  readonly author?: string;
+}
+
+/** A merged (or open) review that contains a commit, and who approved it. */
+export interface CommitReview {
+  readonly review: Review;
+  readonly approvedBy: readonly string[];
 }
 
 export interface Change {

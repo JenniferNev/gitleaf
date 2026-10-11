@@ -1,0 +1,88 @@
+/* Provenance view: component CSS over --gl-* tokens only. */
+body {
+  font-family: var(--gl-font);
+  font-size: var(--gl-font-size);
+  color: var(--gl-text);
+  background: var(--gl-surface);
+  margin: 0;
+  padding: var(--gl-space-6);
+}
+h1 {
+  font-family: var(--gl-font-mono);
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0 0 var(--gl-space-3);
+  word-break: break-all;
+}
+.meta {
+  color: var(--gl-text-muted);
+  margin: var(--gl-space-3) 0;
+}
+.share {
+  display: flex;
+  height: 10px;
+  border-radius: var(--gl-pill-radius);
+  overflow: hidden;
+  margin: var(--gl-space-4) 0 var(--gl-space-6);
+  border: 1px solid var(--gl-border);
+}
+.share .human,
+.dot.human {
+  background: var(--gl-provenance-human);
+}
+.share .agent,
+.dot.agent {
+  background: var(--gl-provenance-agent);
+}
+.share .mixed,
+.dot.mixed {
+  background: var(--gl-provenance-mixed);
+}
+.share .unknown,
+.dot.unknown {
+  background: var(--gl-provenance-unknown);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  text-align: left;
+  color: var(--gl-text-muted);
+  font-weight: 600;
+  padding: var(--gl-space-2) var(--gl-space-3);
+  border-bottom: 1px solid var(--gl-border);
+}
+td {
+  padding: var(--gl-space-2) var(--gl-space-3);
+  border-bottom: 1px solid var(--gl-border);
+  vertical-align: top;
+}
+tr.row {
+  cursor: pointer;
+  transition: background var(--gl-motion-fast);
+}
+tr.row:hover {
+  background: var(--gl-surface-hover);
+}
+tr.row:focus-visible {
+  outline: 1px solid var(--gl-focus);
+  outline-offset: -1px;
+}
+.mono {
+  font-family: var(--gl-font-mono);
+  white-space: nowrap;
+}
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--gl-pill-radius);
+  margin-right: var(--gl-space-2);
+}
+@media (max-width: 360px) {
+  th:nth-child(4),
+  td:nth-child(4) {
+    display: none;
+  }
+}

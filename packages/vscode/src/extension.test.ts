@@ -52,6 +52,8 @@ vi.mock('vscode', () => {
       onDidChangeWorkspaceFolders: disposable,
       onDidChangeConfiguration: disposable,
       getConfiguration: () => ({ get: () => 'default', update: () => Promise.resolve() }),
+      onDidSaveTextDocument: disposable,
+      textDocuments: [],
       createFileSystemWatcher: () => ({
         onDidChange: disposable,
         onDidCreate: disposable,
@@ -59,7 +61,26 @@ vi.mock('vscode', () => {
         dispose: () => undefined,
       }),
     },
+    MarkdownString: class {
+      constructor(public value: string) {}
+    },
+    Hover: class {
+      constructor(public contents: unknown) {}
+    },
+    CodeLens: class {
+      constructor(public range: unknown) {}
+    },
+    Position: class {
+      constructor(public line: number) {}
+    },
+    Selection: class {
+      constructor(public anchor: unknown) {}
+    },
+    TextEditorRevealType: { InCenter: 2 },
+    authentication: { getSession: () => Promise.resolve(undefined) },
     languages: {
+      registerHoverProvider: disposable,
+      registerCodeLensProvider: disposable,
       createDiagnosticCollection: () => ({
         clear: () => undefined,
         set: () => undefined,
@@ -72,7 +93,7 @@ vi.mock('vscode', () => {
       showInformationMessage: () => Promise.resolve(undefined),
       showWarningMessage: () => Promise.resolve(undefined),
     },
-    extensions: { all: [], onDidChange: disposable },
+    extensions: { all: [], onDidChange: disposable, getExtension: () => undefined },
     commands: { registerCommand: disposable, executeCommand: () => Promise.resolve() },
     Uri: { joinPath: () => ({}), file: () => ({}) },
     lm: { registerMcpServerDefinitionProvider: disposable },

@@ -19,6 +19,7 @@
     "clean": "rm -rf dist *.tsbuildinfo"
   },
   "dependencies": {
+    "@gitleaf/adapter-forge-github": "workspace:*",
     "@gitleaf/adapter-fs-node": "workspace:*",
     "@gitleaf/adapter-git-cli": "workspace:*",
     "@gitleaf/core": "workspace:*",

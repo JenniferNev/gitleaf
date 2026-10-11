@@ -109,6 +109,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@gitleaf/adapter-forge-github':
+        specifier: workspace:*
+        version: link:../adapters/forge-github
       '@gitleaf/adapter-fs-node':
         specifier: workspace:*
         version: link:../adapters/fs-node
@@ -218,6 +221,9 @@ importers:
 
   packages/vscode:
     dependencies:
+      '@gitleaf/adapter-forge-github':
+        specifier: workspace:*
+        version: link:../adapters/forge-github
       '@gitleaf/adapter-fs-node':
         specifier: workspace:*
         version: link:../adapters/fs-node
@@ -236,6 +242,9 @@ importers:
       '@gitleaf/mcp-server':
         specifier: workspace:*
         version: link:../mcp-server
+      '@gitleaf/provenance':
+        specifier: workspace:*
+        version: link:../provenance
       '@gitleaf/schema':
         specifier: workspace:*
         version: link:../schema

@@ -132,3 +132,44 @@ describe('coalesce', () => {
     ]);
   });
 });
+
+describe('forge enrichment', () => {
+  it('adds pull request and approvers per commit and keeps ranges split by PR', async () => {
+    const { GitProvenance } = await import('../src/index.js');
+    const blame = [1, 2, 3].map((line) => ({
+      line,
+      originalLine: line,
+      commit: line === 3 ? 'b'.repeat(40) : 'a'.repeat(40),
+      author: 'Sam',
+      authorEmail: 'sam@example.com',
+      authorTime: new Date(0),
+      summary: '',
+    }));
+    const vcs = {
+      blame: () => Promise.resolve(blame),
+      commitTrailers: () => Promise.resolve({}),
+      note: () => Promise.resolve(undefined),
+      status: () => Promise.resolve([]),
+      lastModified: () => Promise.resolve(undefined),
+      remoteUrl: () => Promise.resolve('https://github.com/acme/docs'),
+    };
+    const forge = {
+      reviewForCommit: (_repo: string, commit: string) =>
+        commit.startsWith('a')
+          ? Promise.resolve({
+              review: { id: '42', repo: '.', title: 't', state: 'merged' as const },
+              approvedBy: ['li'],
+            })
+          : Promise.reject(new Error('network down')),
+      listReviews: () => Promise.resolve([]),
+      openReview: () => Promise.reject(new Error('no')),
+    };
+    const result = await new GitProvenance(vcs, { forge }).provenance('.', 'docs/x.md');
+    expect(result.owners.map((o) => [o.startLine, o.endLine, o.pullRequest, o.approvedBy])).toEqual(
+      [
+        [1, 2, '42', ['li']],
+        [3, 3, undefined, undefined],
+      ],
+    );
+  });
+});

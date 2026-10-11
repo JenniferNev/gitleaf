@@ -249,6 +249,16 @@
           "default": "subtle",
           "description": "How much an appearance pack's mascot shows up. Hidden under a screen reader.",
           "scope": "application"
+        },
+        "gitleaf.provenance.display": {
+          "type": "string",
+          "enum": [
+            "hover",
+            "off"
+          ],
+          "default": "hover",
+          "description": "Show provenance (who wrote each line) as hovers and a CodeLens, or turn it off.",
+          "scope": "resource"
         }
       }
     },
@@ -280,6 +290,12 @@
         "command": "gitleaf.revealInExplorer",
         "title": "Reveal in Explorer View",
         "category": "Gitleaf"
+      },
+      {
+        "command": "gitleaf.showProvenance",
+        "title": "Show Provenance",
+        "category": "Gitleaf",
+        "icon": "$(person)"
       },
       {
         "command": "gitleaf.selectAppearance",
@@ -359,6 +375,17 @@
         {
           "command": "gitleaf.revealInExplorer",
           "when": "false"
+        },
+        {
+          "command": "gitleaf.showProvenance",
+          "when": "editorLangId == markdown"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "gitleaf.showProvenance",
+          "when": "editorLangId == markdown",
+          "group": "navigation"
         }
       ]
     }
@@ -377,12 +404,14 @@
     "clean": "rm -rf dist skills *.vsix *.tsbuildinfo"
   },
   "dependencies": {
+    "@gitleaf/adapter-forge-github": "workspace:*",
     "@gitleaf/adapter-fs-node": "workspace:*",
     "@gitleaf/adapter-git-cli": "workspace:*",
     "@gitleaf/core": "workspace:*",
     "@gitleaf/format": "workspace:*",
     "@gitleaf/index": "workspace:*",
     "@gitleaf/mcp-server": "workspace:*",
+    "@gitleaf/provenance": "workspace:*",
     "@gitleaf/schema": "workspace:*"
   },
   "devDependencies": {

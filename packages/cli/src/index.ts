@@ -1,13 +1,19 @@
 /**
- * The `gitleaf` command line. Argument parsing only; every rule lives in core and the libraries.
- *
- * `validate` is a stub until ST-PV13MRCY lands: it accepts the final flags and checks nothing.
+ * The `gitleaf` command line. Argument parsing and printing only; rules live in
+ * @gitleaf/index, formats in @gitleaf/format and @gitleaf/schema.
  */
 import { parseArgs } from 'node:util';
+import { formatText, runValidate } from './validate.js';
 
 export interface Io {
   out: { write(chunk: string): unknown };
   err: { write(chunk: string): unknown };
+  /** Defaults to process.cwd(). */
+  cwd?: string;
+  /** Defaults to process.env. */
+  env?: Readonly<Record<string, string | undefined>>;
+  /** Whether stdout is a terminal. Defaults to false. */
+  isTTY?: boolean;
 }
 
 export const VERSION = '0.0.0';
@@ -15,39 +21,42 @@ export const VERSION = '0.0.0';
 const USAGE = `Usage: gitleaf <command> [options]
 
 Commands:
-  validate [paths...]   Validate docs: frontmatter, links, owners, secret refs (lands in ST-PV13MRCY)
+  validate [paths...]   Validate docs: frontmatter, links, owners, freshness, secret refs
 
 Options:
-  --json                Machine-readable output
+  --config <file>       gitleaf.yaml to use (default: nearest one upwards from the cwd)
+  --json                Machine-readable output (one JSON object)
   --strict              Treat warnings as errors
+  --no-color            Disable color (NO_COLOR is honored too)
   -h, --help            Show this help
   -v, --version         Show the version
+
+Exit codes: 0 ok, 1 findings, 2 usage or configuration error.
 `;
 
-export interface ValidateResult {
-  readonly checked: number;
-  readonly errors: readonly string[];
-  readonly warnings: readonly string[];
-}
+export { runValidate, formatText } from './validate.js';
+export type { ValidateReport } from './validate.js';
 
-/** Placeholder: no rules yet. Exists so CI and AGENTS.md can wire the real command. */
-export async function validate(_paths: readonly string[]): Promise<ValidateResult> {
-  return Promise.resolve({ checked: 0, errors: [], warnings: [] });
+function parseArgv(argv: readonly string[]) {
+  return parseArgs({
+    args: [...argv],
+    allowPositionals: true,
+    options: {
+      config: { type: 'string' },
+      json: { type: 'boolean', default: false },
+      strict: { type: 'boolean', default: false },
+      color: { type: 'boolean' },
+      help: { type: 'boolean', short: 'h', default: false },
+      version: { type: 'boolean', short: 'v', default: false },
+    },
+    allowNegative: true,
+  });
 }
 
 export async function main(argv: readonly string[], io: Io): Promise<number> {
-  let parsed: ReturnType<typeof parseArgs>;
+  let parsed: ReturnType<typeof parseArgv>;
   try {
-    parsed = parseArgs({
-      args: [...argv],
-      allowPositionals: true,
-      options: {
-        json: { type: 'boolean', default: false },
-        strict: { type: 'boolean', default: false },
-        help: { type: 'boolean', short: 'h', default: false },
-        version: { type: 'boolean', short: 'v', default: false },
-      },
-    });
+    parsed = parseArgv(argv);
   } catch (error) {
     io.err.write(`gitleaf: ${error instanceof Error ? error.message : String(error)}\n`);
     io.err.write(USAGE);
@@ -67,16 +76,22 @@ export async function main(argv: readonly string[], io: Io): Promise<number> {
 
   switch (command) {
     case 'validate': {
-      const result = await validate(rest);
+      const cwd = io.cwd ?? process.cwd();
+      const env = io.env ?? process.env;
+      const report = await runValidate({ cwd, paths: rest, configPath: values.config });
       if (values.json) {
-        io.out.write(`${JSON.stringify(result)}\n`);
+        io.out.write(`${JSON.stringify(report)}\n`);
       } else {
+        const color =
+          values.color ??
+          (env.NO_COLOR === undefined && env.FORCE_COLOR !== '0' && (io.isTTY ?? false));
         io.out.write(
-          `gitleaf validate: checked ${String(result.checked)} files, ${String(result.errors.length)} errors, ${String(result.warnings.length)} warnings (rules land in ST-PV13MRCY)\n`,
+          formatText(report, { cwd, color, githubAnnotations: env.GITHUB_ACTIONS === 'true' }),
         );
       }
-      const failing = result.errors.length > 0 || (values.strict && result.warnings.length > 0);
-      return failing ? 1 : 0;
+      const configBroken = report.diagnostics.some((d) => d.rule.startsWith('config/'));
+      if (configBroken) return 2;
+      return report.errors > 0 || (values.strict && report.warnings > 0) ? 1 : 0;
     }
     default:
       io.err.write(`gitleaf: unknown command "${command}"\n`);

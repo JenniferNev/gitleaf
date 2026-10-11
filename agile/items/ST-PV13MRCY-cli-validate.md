@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-PV13MRCY
 type: story
 title: "CLI: gitleaf validate (frontmatter, links, owners, secrets refs)"
-status: backlog
+status: in-review
 priority: high
 epic: EP-0RQVJECD
 points: 5

@@ -45,7 +45,7 @@ pnpm install                 # Node >= 24, pnpm 10 (see packageManager in packag
 pnpm build                   # tsc for every package, in dependency order
 pnpm test                    # Vitest, runs against src/ (never a stale dist/)
 pnpm lint                    # ESLint (typed) + Prettier check. Includes the core dependency rule
-pnpm gitleaf validate        # frontmatter, links, owners, secret refs (stub until ST-PV13MRCY)
+pnpm gitleaf validate        # frontmatter vs schema, links and wikilinks, owners, freshness, secret refs; --json, --strict, NO_COLOR
 pnpm check:identity          # scripts/check-identity.sh
 pnpm check:themes            # regenerate Gitleaf Ink/Paper, fail on contrast failures or drift (needs python3)
 pnpm check:secrets           # gitleaks full-history scan + planted-key proof (needs gitleaks; see SECURITY.md)

@@ -1,7 +1,9 @@
 import type {
   BlameLine,
+  CommitReview,
   ContributorKind,
   DocProvenance,
+  ForgePort,
   LineOwner,
   ProvenancePort,
   Repo,
@@ -65,13 +67,16 @@ function sameOwner(a: LineOwner, b: Omit<LineOwner, 'startLine' | 'endLine'>): b
     a.commit === b.commit &&
     a.agent === b.agent &&
     a.author === b.author &&
-    a.source === b.source
+    a.source === b.source &&
+    a.pullRequest === b.pullRequest
   );
 }
 
 export interface GitProvenanceOptions {
   readonly patterns?: readonly AgentPattern[];
   readonly notesRef?: string;
+  /** When given, each commit is enriched with its pull request and approvers. Failures degrade silently. */
+  readonly forge?: ForgePort;
 }
 
 /** ProvenancePort over any VcsPort: blame, then trailers, then Agent Trace notes. */
@@ -79,18 +84,33 @@ export class GitProvenance implements ProvenancePort {
   readonly #vcs: VcsPort;
   readonly #patterns: readonly AgentPattern[];
   readonly #notesRef: string;
+  readonly #forge: ForgePort | undefined;
 
   constructor(vcs: VcsPort, options: GitProvenanceOptions = {}) {
     this.#vcs = vcs;
     this.#patterns = options.patterns ?? DEFAULT_AGENT_PATTERNS;
     this.#notesRef = options.notesRef ?? AGENT_TRACE_NOTES_REF;
+    this.#forge = options.forge;
+  }
+
+  async #review(repo: Repo['id'], commit: string): Promise<CommitReview | undefined> {
+    if (!this.#forge) return undefined;
+    try {
+      return await this.#forge.reviewForCommit(repo, commit);
+    } catch {
+      return undefined;
+    }
   }
 
   async provenance(repo: Repo['id'], path: RepoRelativePath): Promise<DocProvenance> {
     const blame = await this.#vcs.blame(repo, path);
     const commits = new Map<
       string,
-      { classification: CommitClassification; traces: readonly TraceRecord[] }
+      {
+        classification: CommitClassification;
+        traces: readonly TraceRecord[];
+        review: CommitReview | undefined;
+      }
     >();
     const perLine: PerLine[] = [];
     for (const b of blame) {
@@ -106,9 +126,10 @@ export class GitProvenance implements ProvenancePort {
       }
       let info = commits.get(b.commit);
       if (!info) {
-        const [trailers, note] = await Promise.all([
+        const [trailers, note, review] = await Promise.all([
           this.#vcs.commitTrailers(repo, b.commit),
           this.#vcs.note(repo, b.commit, this.#notesRef),
+          this.#review(repo, b.commit),
         ]);
         info = {
           classification: classifyCommit(
@@ -117,10 +138,11 @@ export class GitProvenance implements ProvenancePort {
             this.#patterns,
           ),
           traces: note === undefined ? [] : parseTraceNote(note),
+          review,
         };
         commits.set(b.commit, info);
       }
-      perLine.push(ownerOf(b, info.classification, info.traces, path));
+      perLine.push(ownerOf(b, info.classification, info.traces, path, info.review));
     }
     const owners = coalesce(perLine);
     const byKind: Record<ContributorKind, number> = { human: 0, agent: 0, mixed: 0, unknown: 0 };
@@ -134,6 +156,7 @@ function ownerOf(
   c: CommitClassification,
   traces: readonly TraceRecord[],
   path: string,
+  review: CommitReview | undefined,
 ): PerLine {
   const base = {
     line: b.line,
@@ -141,6 +164,9 @@ function ownerOf(
     authorEmail: b.authorEmail,
     commit: b.commit,
     commitDate: b.authorTime,
+    ...(review === undefined
+      ? {}
+      : { pullRequest: review.review.id, approvedBy: review.approvedBy }),
   };
   // Layer 3 wins when a trace covers the line as it was in that commit.
   const hit = lookupTrace(traces, path, b.originalLine);

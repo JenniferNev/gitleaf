@@ -103,7 +103,11 @@ export async function main(argv: readonly string[], io: Io): Promise<number> {
         return 2;
       }
       try {
-        const result = await runProvenance({ cwd: io.cwd ?? process.cwd(), file });
+        const result = await runProvenance({
+          cwd: io.cwd ?? process.cwd(),
+          file,
+          env: io.env ?? process.env,
+        });
         io.out.write(values.json ? `${JSON.stringify(result)}\n` : formatProvenance(result));
         return 0;
       } catch (error) {

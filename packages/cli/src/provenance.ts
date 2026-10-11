@@ -1,5 +1,8 @@
 import { relative, resolve } from 'node:path';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { loadConfig } from '@gitleaf/adapter-fs-node';
+import { GitHubForge } from '@gitleaf/adapter-forge-github';
 import { GitCliVcs } from '@gitleaf/adapter-git-cli';
 import type { DocProvenance, LineOwner } from '@gitleaf/core';
 import { GitProvenance } from '@gitleaf/provenance';
@@ -7,6 +10,25 @@ import { GitProvenance } from '@gitleaf/provenance';
 export interface ProvenanceOptions {
   readonly cwd: string;
   readonly file: string;
+  readonly env?: Readonly<Record<string, string | undefined>>;
+}
+
+const run = promisify(execFile);
+
+/** GITHUB_TOKEN or GH_TOKEN, else `gh auth token` when gh is installed and logged in, else nothing. */
+export async function githubToken(
+  env: Readonly<Record<string, string | undefined>>,
+): Promise<string | undefined> {
+  const fromEnv = env.GITHUB_TOKEN ?? env.GH_TOKEN;
+  if (fromEnv) return fromEnv;
+  if (env.GITLEAF_NO_GH === '1') return undefined;
+  try {
+    const { stdout } = await run('gh', ['auth', 'token'], { encoding: 'utf8', timeout: 5_000 });
+    const token = stdout.trim();
+    return token === '' ? undefined : token;
+  } catch {
+    return undefined;
+  }
 }
 
 /** Computes provenance for one file in the current repository (the one holding gitleaf.yaml, or the cwd). */
@@ -18,7 +40,13 @@ export async function runProvenance(options: ProvenanceOptions): Promise<DocProv
   if (path.startsWith('..'))
     throw new Error(`${options.file} is outside the repository at ${repoRoot}`);
   const vcs = new GitCliVcs([{ id: '.', rootPath: repoRoot }]);
-  return new GitProvenance(vcs).provenance('.', path);
+  const env = options.env ?? process.env;
+  let token: Promise<string | undefined> | undefined;
+  const forge = new GitHubForge({
+    token: () => (token ??= githubToken(env)),
+    remoteUrl: (repo) => vcs.remoteUrl(repo),
+  });
+  return new GitProvenance(vcs, { forge }).provenance('.', path);
 }
 
 const KIND_LABEL: Record<LineOwner['kind'], string> = {
@@ -41,6 +69,10 @@ export function formatProvenance(p: DocProvenance): string {
       o.commitDate === undefined || o.source === 'uncommitted'
         ? ''
         : o.commitDate.toISOString().slice(0, 10);
+    const pr =
+      o.pullRequest === undefined
+        ? ''
+        : `PR #${o.pullRequest}${o.approvedBy && o.approvedBy.length > 0 ? ` approved by ${o.approvedBy.join(', ')}` : ''}`;
     return [
       lines.padEnd(9),
       KIND_LABEL[o.kind].padEnd(8),
@@ -48,6 +80,7 @@ export function formatProvenance(p: DocProvenance): string {
       date.padEnd(10),
       who,
       `[${o.source}]`,
+      ...(pr === '' ? [] : [pr]),
     ].join('  ');
   });
   const pct = (n: number) => (p.lines === 0 ? '0%' : `${String(Math.round((100 * n) / p.lines))}%`);

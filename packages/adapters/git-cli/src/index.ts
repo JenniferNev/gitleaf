@@ -9,17 +9,24 @@ import type { BlameLine, Change, Repo, RepoRelativePath, VcsPort } from '@gitlea
 
 const run = promisify(execFile);
 
+export interface GitCliOptions {
+  /** Path of the git executable. Defaults to `git` on PATH; the extension passes the one vscode.git uses. */
+  readonly gitPath?: string;
+}
+
 export class GitCliVcs implements VcsPort {
   readonly #roots: ReadonlyMap<string, string>;
+  readonly #gitPath: string;
 
-  constructor(repos: readonly Repo[]) {
+  constructor(repos: readonly Repo[], options: GitCliOptions = {}) {
     this.#roots = new Map(repos.map((r) => [r.id, r.rootPath]));
+    this.#gitPath = options.gitPath ?? 'git';
   }
 
   async #git(repo: Repo['id'], args: readonly string[]): Promise<string> {
     const root = this.#roots.get(repo);
     if (root === undefined) throw new Error(`unknown repository "${repo}"`);
-    const { stdout } = await run('git', ['-C', root, ...args], {
+    const { stdout } = await run(this.#gitPath, ['-C', root, ...args], {
       encoding: 'utf8',
       timeout: 20_000,
       maxBuffer: 64 * 1024 * 1024,
@@ -54,6 +61,15 @@ export class GitCliVcs implements VcsPort {
   async note(repo: Repo['id'], commit: string, ref: string): Promise<string | undefined> {
     try {
       return await this.#git(repo, ['notes', `--ref=${ref}`, 'show', commit]);
+    } catch {
+      return undefined;
+    }
+  }
+
+  async remoteUrl(repo: Repo['id'], name = 'origin'): Promise<string | undefined> {
+    try {
+      const url = (await this.#git(repo, ['remote', 'get-url', name])).trim();
+      return url === '' ? undefined : url;
     } catch {
       return undefined;
     }

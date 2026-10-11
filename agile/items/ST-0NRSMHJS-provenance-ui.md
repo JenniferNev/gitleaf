@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: ST-0NRSMHJS
 type: story
 title: "Provenance hover, CodeLens and view, with GitHub approvals"
-status: backlog
+status: in-review
 priority: high
 epic: EP-XWARXVAT
 points: 8

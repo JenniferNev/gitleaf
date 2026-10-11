@@ -8,6 +8,7 @@
 import { join } from 'node:path';
 import * as vscode from 'vscode';
 import { AppearanceService } from './appearance/index.js';
+import { ProvenanceService } from './provenance/index.js';
 import { WorkspaceService } from './workspace/index.js';
 
 export const MCP_PROVIDER_ID = 'gitleaf.mcp';
@@ -34,11 +35,13 @@ export function serverDefinitions(
 export function activate(context: vscode.ExtensionContext): void {
   const output = vscode.window.createOutputChannel('Gitleaf');
   const changed = new vscode.EventEmitter<void>();
+  let workspaces: WorkspaceService;
   context.subscriptions.push(
     output,
     changed,
     new AppearanceService(context, output),
-    new WorkspaceService(output),
+    (workspaces = new WorkspaceService(output)),
+    new ProvenanceService(context, workspaces, output),
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
       changed.fire();
     }),

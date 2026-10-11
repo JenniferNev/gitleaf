@@ -5,6 +5,7 @@
 import type {
   BlameLine,
   Change,
+  CommitReview,
   DocProvenance,
   DocRootSpec,
   FileStat,
@@ -38,12 +39,16 @@ export interface VcsPort {
   ): Promise<Readonly<Record<string, readonly string[]>>>;
   /** Text of a git note on a commit under `refs/notes/<ref>`, or undefined when there is none. */
   note(repo: Repo['id'], commit: string, ref: string): Promise<string | undefined>;
+  /** Fetch URL of a remote (`origin` by default), or undefined when there is none. */
+  remoteUrl(repo: Repo['id'], name?: string): Promise<string | undefined>;
 }
 
 /** Forge operations. Approve and merge are deliberately absent: agents never do those. */
 export interface ForgePort {
   listReviews(repo: Repo['id']): Promise<readonly Review[]>;
   openReview(repo: Repo['id'], title: string, body: string): Promise<Review>;
+  /** The pull request that brought a commit in, with the people who approved it. Undefined when none or unknown. */
+  reviewForCommit(repo: Repo['id'], commit: string): Promise<CommitReview | undefined>;
 }
 
 export interface ProvenancePort {

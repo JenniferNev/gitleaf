@@ -3,7 +3,7 @@ schema: gitleaf/item@1
 id: EP-0RQVJECD
 type: epic
 title: "Foundations: docs in git, validated, attributable, agent-ready"
-status: in-progress
+status: done
 priority: high
 created: 2026-10-09
 ---
